@@ -1,10 +1,11 @@
 import mongodb from "mongodb";
+import dotenv from "dotenv";
 
+dotenv.config();
 export default async function makeDb() {
     const MongoClient = mongodb.MongoClient;
-    const url = "mongodb+srv://antonio:cAgliAri20@cluster0-euwvg.mongodb.net";
     const dbName = "mm_api_demo";
-    const client = new MongoClient(url, {
+    const client = new MongoClient(process.env.DB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
