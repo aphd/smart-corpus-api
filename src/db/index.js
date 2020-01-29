@@ -1,15 +1,18 @@
-import mongodb from 'mongodb'
+import mongodb from "mongodb";
 
-export default async function makeDb () {
-  const MongoClient = mongodb.MongoClient
-  const url = 'mongodb://localhost:27017'
-  const dbName = 'mm_api_demo'
-  const client = new MongoClient(url, { useNewUrlParser: true })
-  await client.connect()
-  const db = await client.db(dbName)
-  db.makeId = makeIdFromString
-  return db
+export default async function makeDb() {
+    const MongoClient = mongodb.MongoClient;
+    const url = "mongodb+srv://antonio:cAgliAri20@cluster0-euwvg.mongodb.net";
+    const dbName = "mm_api_demo";
+    const client = new MongoClient(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+    await client.connect();
+    const db = await client.db(dbName);
+    db.makeId = makeIdFromString;
+    return db;
 }
-function makeIdFromString (id) {
-  return new mongodb.ObjectID(id)
+function makeIdFromString(id) {
+    return new mongodb.ObjectID(id);
 }
