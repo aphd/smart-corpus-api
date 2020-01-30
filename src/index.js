@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import handleContactsRequest from "./contacts";
+import handleContactsRequest from "./smacs";
 import adaptRequest from "./helpers/adapt-request";
 
 const app = express();
