@@ -4,7 +4,6 @@ Watch the companion video at: https://www.youtube.com/watch?v=fy6-LSE_zjI
 
 ## Prerequisites
 - Node.js
-- Mongo DB
 - Git
 
 ## Getting started
@@ -12,19 +11,19 @@ Follow these steps at the command line:
 
 ### 1. Clone and Install 
 ```bash
-git clone https://github.com/arcdev1/mm_express_api_example.git
-cd mm_express_api_example
+git clone https://github.com/aphd/smac-corpus-api.git
+cd smac-corpus-api
 npm install
 ```
 
-### 2. Start Mongo
+### 2. Set the environment variables
+
 ```bash
-mongod
+echo "DB_CONNECTION=mongodb+srv://<user>:<password>@cluster0-euwvg.mongodb.net" > .env 
 ```
 
-### 3. Run the solution
+### 3. Run the service
 ```bash
 npm run start
 ```
-## Troubleshooting
-To get the unique email error to work like in the video, you need to add a unique constraint on the email field in MongoDB as described at: https://docs.mongodb.com/manual/core/index-unique/
+
