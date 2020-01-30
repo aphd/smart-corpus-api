@@ -1,5 +1,5 @@
-import { RequiredParameterError } from './errors'
+import { RequiredParameterError } from "./errors";
 
-export default function requiredParam (param) {
-  throw new RequiredParameterError(param)
+export default function requiredParam(param) {
+    throw new RequiredParameterError(param);
 }
