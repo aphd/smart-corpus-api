@@ -6,8 +6,8 @@ import adaptRequest from "./helpers/adapt-request";
 const app = express();
 app.use(bodyParser.json());
 
-app.all("/contacts", contactsController);
-app.get("/contacts/:id", contactsController);
+app.all("/smacs", contactsController);
+app.get("/smacs/:id", contactsController);
 
 function contactsController(req, res) {
     const httpRequest = adaptRequest(req);
@@ -21,4 +21,6 @@ function contactsController(req, res) {
         .catch(e => res.status(500).end());
 }
 
-app.listen(9090, () => console.log(`Listening on port 9090`));
+app.listen(process.env.PORT, () =>
+    console.log(`Listening on port ${process.env.PORT}`)
+);
