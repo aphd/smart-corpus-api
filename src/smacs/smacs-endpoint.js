@@ -6,14 +6,14 @@ import {
 import makeHttpError from "../helpers/http-error";
 import makeSmac from "./smac";
 
-export default function makeContactsEndpointHandler({ contactList }) {
+export default function makeSmacsEndpointHandler({ smacList }) {
     return async function handle(httpRequest) {
         switch (httpRequest.method) {
             case "POST":
-                return postContact(httpRequest);
+                return postSmac(httpRequest);
 
             case "GET":
-                return getContacts(httpRequest);
+                return getSmacs(httpRequest);
 
             default:
                 return makeHttpError({
@@ -23,13 +23,13 @@ export default function makeContactsEndpointHandler({ contactList }) {
         }
     };
 
-    async function getContacts(httpRequest) {
+    async function getSmacs(httpRequest) {
         const { id } = httpRequest.pathParams || {};
         const { max, before, after } = httpRequest.queryParams || {};
 
         const result = id
-            ? await contactList.findById({ contactId: id })
-            : await contactList.getItems({ max, before, after });
+            ? await smacList.findById({ contactId: id })
+            : await smacList.getItems({ max, before, after });
         return {
             headers: {
                 "Content-Type": "application/json"
@@ -39,9 +39,9 @@ export default function makeContactsEndpointHandler({ contactList }) {
         };
     }
 
-    async function postContact(httpRequest) {
-        let contactInfo = httpRequest.body;
-        if (!contactInfo) {
+    async function postSmac(httpRequest) {
+        let smacInfo = httpRequest.body;
+        if (!smacInfo) {
             return makeHttpError({
                 statusCode: 400,
                 errorMessage: "Bad request. No POST body."
@@ -50,7 +50,7 @@ export default function makeContactsEndpointHandler({ contactList }) {
 
         if (typeof httpRequest.body === "string") {
             try {
-                contactInfo = JSON.parse(contactInfo);
+                smacInfo = JSON.parse(smacInfo);
             } catch {
                 return makeHttpError({
                     statusCode: 400,
@@ -60,8 +60,8 @@ export default function makeContactsEndpointHandler({ contactList }) {
         }
 
         try {
-            const contact = makeSmac(contactInfo);
-            const result = await contactList.add(contact);
+            const smac = makeSmac(smacInfo);
+            const result = await smacList.add(smac);
             return {
                 headers: {
                     "Content-Type": "application/json"

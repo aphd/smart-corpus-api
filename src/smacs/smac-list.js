@@ -1,7 +1,7 @@
 import makeSmac from "./smac";
 import { UniqueConstraintError } from "../helpers/errors";
 
-export default function makeContactList({ database }) {
+export default function makeSmacList({ database }) {
     return Object.freeze({
         add,
         findByEmail,

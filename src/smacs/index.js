@@ -1,9 +1,9 @@
 import makeDb from "../db";
-import makeContactList from "./smac-list";
-import makeContactsEndpointHandler from "./contacts-endpoint";
+import makeSmacList from "./smac-list";
+import makeSmacsEndpointHandler from "./smacs-endpoint";
 
 const database = makeDb();
-const contactList = makeContactList({ database });
-const contactsEndpointHandler = makeContactsEndpointHandler({ contactList });
+const smacList = makeSmacList({ database });
+const contactsEndpointHandler = makeSmacsEndpointHandler({ smacList });
 
 export default contactsEndpointHandler;
