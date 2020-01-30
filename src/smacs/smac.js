@@ -11,12 +11,13 @@ export default function makeSmac(contactInfo = requiredParam("contactInfo")) {
     function validate({
         firstName = requiredParam("firstName"),
         lastName = requiredParam("lastName"),
-        emailAddress = requiredParam("emailAddress"),
+        // emailAddress = requiredParam("emailAddress"),
         ...otherInfo
     } = {}) {
         validateName("first", firstName);
         validateName("last", lastName);
-        validateEmail(emailAddress);
+        // validateEmail(emailAddress);
+        return { firstName, lastName, ...otherInfo };
         return { firstName, lastName, emailAddress, ...otherInfo };
     }
 
@@ -38,8 +39,8 @@ export default function makeSmac(contactInfo = requiredParam("contactInfo")) {
         return {
             ...otherInfo,
             firstName: upperFirst(firstName),
-            lastName: upperFirst(lastName),
-            emailAddress: emailAddress.toLowerCase()
+            lastName: upperFirst(lastName)
+            // emailAddress: emailAddress.toLowerCase()
         };
     }
 }
