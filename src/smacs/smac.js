@@ -9,22 +9,22 @@ export default function makeSmac(contactInfo = requiredParam("contactInfo")) {
     return Object.freeze(normalContact);
 
     function validate({
-        firstName = requiredParam("firstName"),
-        lastName = requiredParam("lastName"),
+        hash = requiredParam("hash"),
+        // lastName = requiredParam("lastName"),
         // emailAddress = requiredParam("emailAddress"),
         ...otherInfo
     } = {}) {
-        validateName("first", firstName);
-        validateName("last", lastName);
+        validateHash("hash", hash);
+        // validateName("last", lastName);
         // validateEmail(emailAddress);
-        return { firstName, lastName, ...otherInfo };
+        return { hash, ...otherInfo };
         return { firstName, lastName, emailAddress, ...otherInfo };
     }
 
-    function validateName(label, name) {
-        if (name.length < 2) {
+    function validateHash(label, hash) {
+        if (hash.length !== 42) {
             throw new InvalidPropertyError(
-                `A contact's ${label} name must be at least 2 characters long.`
+                `An ${label} must be 42 characters long. Yours is ${hash.length}`
             );
         }
     }
@@ -35,11 +35,11 @@ export default function makeSmac(contactInfo = requiredParam("contactInfo")) {
         }
     }
 
-    function normalize({ emailAddress, firstName, lastName, ...otherInfo }) {
+    function normalize({ emailAddress, hash, lastName, ...otherInfo }) {
         return {
             ...otherInfo,
-            firstName: upperFirst(firstName),
-            lastName: upperFirst(lastName)
+            hash: upperFirst(hash)
+            // lastName: upperFirst(lastName)
             // emailAddress: emailAddress.toLowerCase()
         };
     }
