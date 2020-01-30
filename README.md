@@ -19,7 +19,7 @@ npm install
 ### 2. Set the environment variables
 
 ```bash
-echo "DB_CONNECTION=mongodb+srv://<user>:<password>@cluster0-euwvg.mongodb.net" > .env 
+echo "DB_URL=mongodb+srv://<user>:<password>@cluster0-euwvg.mongodb.net" > .env 
 ```
 
 ### 3. Run the service
