@@ -16,7 +16,7 @@ function contactsController(req, res, next) {
             res
                 .set(headers)
                 .status(statusCode)
-                .send(dasta)
+                .send(data)
         )
         .catch(err => {
             console.log(next(err));
