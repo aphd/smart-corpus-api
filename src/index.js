@@ -9,16 +9,19 @@ app.use(bodyParser.json());
 app.all("/smacs", contactsController);
 app.get("/smacs/:id", contactsController);
 
-function contactsController(req, res) {
+function contactsController(req, res, next) {
     const httpRequest = adaptRequest(req);
     handleContactsRequest(httpRequest)
         .then(({ headers, statusCode, data }) =>
             res
                 .set(headers)
                 .status(statusCode)
-                .send(data)
+                .send(dasta)
         )
-        .catch(e => res.status(500).end());
+        .catch(err => {
+            console.log(next(err));
+            // res.status(500).send("Something broke!");
+        });
 }
 
 app.listen(process.env.PORT, () =>
