@@ -6,25 +6,17 @@ export default function makeSmacList({ database }) {
 
     return Object.freeze({
         add,
-        findByHash,
-        findById,
         getItems,
         remove,
         replace,
         update
     });
 
-    async function getItems({ max = 100, before, after } = {}) {
+    async function getItems(query) {
         const db = await database;
-        const query = {};
-        if (before || after) {
-            query._id = {};
-            query._id = before
-                ? { ...query._id, $lt: db.makeId(before) }
-                : query._id;
-            query._id = after
-                ? { ...query._id, $gt: db.makeId(after) }
-                : query._id;
+        const max = 100;
+        if (query._id) {
+            query._id = db.makeId(query._id);
         }
 
         return (
@@ -60,26 +52,6 @@ export default function makeSmacList({ database }) {
             success: result.ok === 1,
             created: documentToSmac(ops[0])
         };
-    }
-
-    async function findById({ smacId }) {
-        const db = await database;
-        const found = await db
-            .collection(collection)
-            .findOne({ _id: db.makeId(smacId) });
-        if (found) {
-            return documentToSmac(found);
-        }
-        return null;
-    }
-
-    async function findByHash({ hash }) {
-        const db = await database;
-        const results = await db
-            .collection(collection)
-            .find({ hash })
-            .toArray();
-        return results.map(documentToSmac);
     }
 
     async function remove(query) {

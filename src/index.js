@@ -7,7 +7,8 @@ const app = express();
 app.use(bodyParser.json());
 
 app.all("/smacs", smacsController);
-app.get("/smacs/:id", smacsController);
+app.get("/smacsById/:_id", smacsController);
+app.get("/smacsByHash/:hash", smacsController);
 app.delete("/smacsById/:_id", smacsController);
 app.delete("/smacsByHash/:hash", smacsController);
 
