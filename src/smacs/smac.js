@@ -2,10 +2,10 @@ import requiredParam from "../helpers/required-param";
 import { InvalidPropertyError } from "../helpers/errors";
 import upperFirst from "../helpers/upper-first";
 
-export default function makeSmac(contactInfo = requiredParam("contactInfo")) {
-    const validContact = validate(contactInfo);
-    const normalContact = normalize(validContact);
-    return Object.freeze(normalContact);
+export default function makeSmac(smacInfo = requiredParam("smacInfo")) {
+    const validSmac = validate(smacInfo);
+    const normalSmac = normalize(validSmac);
+    return Object.freeze(normalSmac);
 
     function validate({ hash = requiredParam("hash"), ...otherInfo } = {}) {
         validateHash("hash", hash);
