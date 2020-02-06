@@ -6,7 +6,7 @@ export default function makeSmacList({ database }) {
 
     return Object.freeze({
         add,
-        findByEmail,
+        findByHash,
         findById,
         getItems,
         remove,
@@ -51,9 +51,7 @@ export default function makeSmacList({ database }) {
                         .split(":")[2]
                         .split(" ");
                     throw new UniqueConstraintError(
-                        mongoIndex === "ContactEmailIndex"
-                            ? "emailAddress"
-                            : "smacId"
+                        mongoIndex === "ContactEmailIndex" ? "hash" : "smacId"
                     );
                 }
                 throw mongoError;
@@ -75,11 +73,11 @@ export default function makeSmacList({ database }) {
         return null;
     }
 
-    async function findByEmail({ emailAddress }) {
+    async function findByHash({ hash }) {
         const db = await database;
         const results = await db
             .collection(collection)
-            .find({ emailAddress })
+            .find({ hash })
             .toArray();
         return results.map(documentToSmac);
     }
