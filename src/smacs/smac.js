@@ -20,7 +20,7 @@ export default function makeSmac(smacInfo = requiredParam("smacInfo")) {
         }
     }
 
-    function normalize({ emailAddress, hash, lastName, ...otherInfo }) {
+    function normalize({ hash, ...otherInfo }) {
         return {
             ...otherInfo,
             hash: upperFirst(hash)
