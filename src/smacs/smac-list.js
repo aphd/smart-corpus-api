@@ -82,13 +82,12 @@ export default function makeSmacList({ database }) {
         return results.map(documentToSmac);
     }
 
-    async function remove({ smacId, ...smac }) {
+    async function remove(query) {
         const db = await database;
-        if (smacId) {
-            smac._id = db.makeId(smacId);
+        if (query._id) {
+            query._id = db.makeId(query._id);
         }
-
-        const { result } = await db.collection(collection).deleteMany(smac);
+        const { result } = await db.collection(collection).deleteOne(query);
         return result.n;
     }
 

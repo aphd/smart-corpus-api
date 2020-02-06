@@ -8,7 +8,8 @@ app.use(bodyParser.json());
 
 app.all("/smacs", smacsController);
 app.get("/smacs/:id", smacsController);
-app.delete("/smacs/:id", smacsController);
+app.delete("/smacsById/:_id", smacsController);
+app.delete("/smacsByHash/:hash", smacsController);
 
 function smacsController(req, res, next) {
     const httpRequest = adaptRequest(req);

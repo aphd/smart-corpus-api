@@ -27,8 +27,8 @@ export default function makeSmacsEndpointHandler({ smacList }) {
     };
 
     async function deleteSmacs(httpRequest) {
-        const { id } = httpRequest.pathParams || {};
-        const result = await smacList.remove({ smacId: id });
+        const query = httpRequest.pathParams || {};
+        const result = await smacList.remove(query);
 
         return {
             headers: {
