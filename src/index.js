@@ -7,7 +7,10 @@ const app = express();
 app.use(bodyParser.json());
 
 app.all("/smacs", smacsController);
-app.get("/smacs/:id", smacsController);
+app.get("/smacsById/:_id", smacsController);
+app.get("/smacsByHash/:hash", smacsController);
+app.delete("/smacsById/:_id", smacsController);
+app.delete("/smacsByHash/:hash", smacsController);
 
 function smacsController(req, res, next) {
     const httpRequest = adaptRequest(req);
@@ -19,8 +22,7 @@ function smacsController(req, res, next) {
                 .send(data)
         )
         .catch(err => {
-            console.log(next(err));
-            // res.status(500).send("Something broke!");
+            console.log(next("handleSmacsRequest error", err));
         });
 }
 
