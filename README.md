@@ -1,6 +1,4 @@
-# Live Code Walkthrough - Designing a clean RESTful API with Node.js (Express + Mongo)
-
-Watch the companion video at: https://www.youtube.com/watch?v=fy6-LSE_zjI
+# Smac Corpus APO - A clean RESTful API with Node.js (Express + Mongo)
 
 ## Prerequisites
 
@@ -31,3 +29,7 @@ echo "PORT=<port>" >> .env
 ```bash
 npm run start
 ```
+
+### References
+
+Watch the companion video at: https://www.youtube.com/watch?v=fy6-LSE_zjI
