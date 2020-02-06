@@ -9,7 +9,9 @@ export default async function makeDb() {
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
-    await client.connect();
+    await client.connect().catch(err => {
+        console.error("Error in client.connect()\n", err);
+    });
     const db = await client.db(dbName);
     db.makeId = makeIdFromString;
     return db;
