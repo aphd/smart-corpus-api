@@ -2,6 +2,8 @@ import makeSmac from "./smac";
 import { UniqueConstraintError } from "../helpers/errors";
 
 export default function makeSmacList({ database }) {
+    const collection = "smacs";
+
     return Object.freeze({
         add,
         findByEmail,
@@ -27,21 +29,21 @@ export default function makeSmacList({ database }) {
 
         return (
             await db
-                .collection("contacts")
+                .collection(collection)
                 .find(query)
                 .limit(Number(max))
                 .toArray()
-        ).map(documentToContact);
+        ).map(documentToSmac);
     }
 
-    async function add({ contactId, ...contact }) {
+    async function add({ smacId, ...smac }) {
         const db = await database;
-        if (contactId) {
-            contact._id = db.makeId(contactId);
+        if (smacId) {
+            smac._id = db.makeId(smacId);
         }
         const { result, ops } = await db
-            .collection("contacts")
-            .insertOne(contact)
+            .collection(collection)
+            .insertOne(smac)
             .catch(mongoError => {
                 const [errorCode] = mongoError.message.split(" ");
                 if (errorCode === "E11000") {
@@ -51,24 +53,24 @@ export default function makeSmacList({ database }) {
                     throw new UniqueConstraintError(
                         mongoIndex === "ContactEmailIndex"
                             ? "emailAddress"
-                            : "contactId"
+                            : "smacId"
                     );
                 }
                 throw mongoError;
             });
         return {
             success: result.ok === 1,
-            created: documentToContact(ops[0])
+            created: documentToSmac(ops[0])
         };
     }
 
-    async function findById({ contactId }) {
+    async function findById({ smacId }) {
         const db = await database;
         const found = await db
-            .collection("contacts")
-            .findOne({ _id: db.makeId(contactId) });
+            .collection(collection)
+            .findOne({ _id: db.makeId(smacId) });
         if (found) {
-            return documentToContact(found);
+            return documentToSmac(found);
         }
         return null;
     }
@@ -76,29 +78,29 @@ export default function makeSmacList({ database }) {
     async function findByEmail({ emailAddress }) {
         const db = await database;
         const results = await db
-            .collection("contacts")
+            .collection(collection)
             .find({ emailAddress })
             .toArray();
-        return results.map(documentToContact);
+        return results.map(documentToSmac);
     }
 
-    async function remove({ contactId, ...contact }) {
+    async function remove({ smacId, ...smac }) {
         const db = await database;
-        if (contactId) {
-            contact._id = db.makeId(contactId);
+        if (smacId) {
+            smac._id = db.makeId(smacId);
         }
 
-        const { result } = await db.collection("contacts").deleteMany(contact);
+        const { result } = await db.collection(collection).deleteMany(smac);
         return result.n;
     }
 
     // todo:
-    async function replace(contact) {}
+    async function replace(smac) {}
 
     // todo:
-    async function update(contact) {}
+    async function update(smac) {}
 
-    function documentToContact({ _id: contactId, ...doc }) {
-        return makeSmac({ contactId, ...doc });
+    function documentToSmac({ _id: smacId, ...doc }) {
+        return makeSmac({ smacId, ...doc });
     }
 }
