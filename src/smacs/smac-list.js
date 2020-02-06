@@ -67,7 +67,16 @@ export default function makeSmacList({ database }) {
     async function replace(smac) {}
 
     // todo:
-    async function update(smac) {}
+    async function update(query, body) {
+        const db = await database;
+        if (query._id) {
+            query._id = db.makeId(query._id);
+        }
+
+        return await db
+            .collection(collection)
+            .findOneAndUpdate(query, { $set: body }, {});
+    }
 
     function documentToSmac({ _id: smacId, ...doc }) {
         return makeSmac({ smacId, ...doc });
