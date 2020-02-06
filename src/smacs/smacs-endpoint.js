@@ -15,6 +15,9 @@ export default function makeSmacsEndpointHandler({ smacList }) {
             case "GET":
                 return getSmacs(httpRequest);
 
+            case "DELETE":
+                return deleteSmacs(httpRequest);
+
             default:
                 return makeHttpError({
                     statusCode: 405,
@@ -23,13 +26,21 @@ export default function makeSmacsEndpointHandler({ smacList }) {
         }
     };
 
-    async function getSmacs(httpRequest) {
-        const { id } = httpRequest.pathParams || {};
-        const { max, before, after } = httpRequest.queryParams || {};
+    async function deleteSmacs(httpRequest) {
+        const query = httpRequest.pathParams || {};
+        const result = await smacList.remove(query);
 
-        const result = id
-            ? await smacList.findById({ smacId: id })
-            : await smacList.getItems({ max, before, after });
+        return {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            statusCode: 200,
+            data: JSON.stringify(result)
+        };
+    }
+
+    async function getSmacs(httpRequest) {
+        const result = await smacList.getItems(httpRequest.pathParams);
         return {
             headers: {
                 "Content-Type": "application/json"

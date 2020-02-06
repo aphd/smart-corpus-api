@@ -6,25 +6,17 @@ export default function makeSmacList({ database }) {
 
     return Object.freeze({
         add,
-        findByEmail,
-        findById,
         getItems,
         remove,
         replace,
         update
     });
 
-    async function getItems({ max = 100, before, after } = {}) {
+    async function getItems(query) {
         const db = await database;
-        const query = {};
-        if (before || after) {
-            query._id = {};
-            query._id = before
-                ? { ...query._id, $lt: db.makeId(before) }
-                : query._id;
-            query._id = after
-                ? { ...query._id, $gt: db.makeId(after) }
-                : query._id;
+        const max = 100;
+        if (query._id) {
+            query._id = db.makeId(query._id);
         }
 
         return (
@@ -51,9 +43,7 @@ export default function makeSmacList({ database }) {
                         .split(":")[2]
                         .split(" ");
                     throw new UniqueConstraintError(
-                        mongoIndex === "ContactEmailIndex"
-                            ? "emailAddress"
-                            : "smacId"
+                        mongoIndex === "ContactEmailIndex" ? "hash" : "smacId"
                     );
                 }
                 throw mongoError;
@@ -64,33 +54,12 @@ export default function makeSmacList({ database }) {
         };
     }
 
-    async function findById({ smacId }) {
+    async function remove(query) {
         const db = await database;
-        const found = await db
-            .collection(collection)
-            .findOne({ _id: db.makeId(smacId) });
-        if (found) {
-            return documentToSmac(found);
+        if (query._id) {
+            query._id = db.makeId(query._id);
         }
-        return null;
-    }
-
-    async function findByEmail({ emailAddress }) {
-        const db = await database;
-        const results = await db
-            .collection(collection)
-            .find({ emailAddress })
-            .toArray();
-        return results.map(documentToSmac);
-    }
-
-    async function remove({ smacId, ...smac }) {
-        const db = await database;
-        if (smacId) {
-            smac._id = db.makeId(smacId);
-        }
-
-        const { result } = await db.collection(collection).deleteMany(smac);
+        const { result } = await db.collection(collection).deleteOne(query);
         return result.n;
     }
 
