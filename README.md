@@ -1,4 +1,4 @@
-# Smac Corpus APO - A clean RESTful API with Node.js (Express + Mongo)
+# Smac Corpus AP) - A clean RESTful API with Node.js
 
 ## Prerequisites
 
