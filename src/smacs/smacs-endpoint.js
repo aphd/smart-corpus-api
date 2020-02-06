@@ -18,6 +18,9 @@ export default function makeSmacsEndpointHandler({ smacList }) {
             case "DELETE":
                 return deleteSmacs(httpRequest);
 
+            case "PATCH":
+                return updateSmac(httpRequest);
+
             default:
                 return makeHttpError({
                     statusCode: 405,
@@ -92,5 +95,17 @@ export default function makeSmacsEndpointHandler({ smacList }) {
                         : 500
             });
         }
+    }
+
+    async function updateSmac(httpRequest) {
+        const { pathParams, body } = httpRequest;
+        const result = await smacList.update(pathParams, body);
+        return {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            statusCode: 200,
+            data: JSON.stringify(result)
+        };
     }
 }
