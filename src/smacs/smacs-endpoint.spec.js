@@ -1,6 +1,6 @@
 import handle from ".";
 
-describe("Contacts Endpoint", () => {
+describe("Smacs Endpoint", () => {
     it("Will NOT create a contact without an email address", async () => {
         const result = await handle({
             method: "POST",
