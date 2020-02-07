@@ -54,28 +54,28 @@ export default function makeSmacsEndpointHandler({ smacList }) {
     }
 
     async function postSmac(httpRequest) {
-        let smacInfo = httpRequest.body;
-        if (!smacInfo) {
-            return makeHttpError({
-                statusCode: 400,
-                errorMessage: "Bad request. No POST body."
-            });
-        }
+        // if (!smacInfo) {
+        //     return makeHttpError({
+        //         statusCode: 400,
+        //         errorMessage: "Bad request. No POST body."
+        //     });
+        // }
 
-        if (typeof httpRequest.body === "string") {
-            try {
-                smacInfo = JSON.parse(smacInfo);
-            } catch {
-                return makeHttpError({
-                    statusCode: 400,
-                    errorMessage: "Bad request. POST body must be valid JSON."
-                });
-            }
-        }
+        // if (typeof httpRequest.body === "string") {
+        //     try {
+        //         smacInfo = JSON.parse(smacInfo);
+        //     } catch {
+        //         return makeHttpError({
+        //             statusCode: 400,
+        //             errorMessage: "Bad request. POST body must be valid JSON."
+        //         });
+        //     }
+        // }
 
         try {
-            const smac = makeSmac(smacInfo);
-            const result = await smacList.add(smac);
+            // const smac = makeSmac(smacInfo);
+            console.log("smacInfo", httpRequest.body);
+            const result = await smacList.add(httpRequest.body);
             return {
                 headers: {
                     "Content-Type": "application/json"
@@ -98,6 +98,7 @@ export default function makeSmacsEndpointHandler({ smacList }) {
     }
 
     async function updateSmac(httpRequest) {
+        console.log("updateSmac httpRequest: ", httpRequest);
         const { pathParams, body } = httpRequest;
         const result = await smacList.update(pathParams, body);
         return {
