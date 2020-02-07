@@ -32,4 +32,7 @@ npm run start
 
 ### References
 
-Watch the companion video at: https://www.youtube.com/watch?v=fy6-LSE_zjI
+<ol>
+  <li>Watch the companion video at: https://www.youtube.com/watch?v=fy6-LSE_zjI</li>
+  <li>https://etherscan.io/apis#contracts</li>
+</ol>
