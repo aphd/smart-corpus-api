@@ -11,6 +11,8 @@ app.get("/smacsById/:_id", smacsController);
 app.get("/smacsByHash/:hash", smacsController);
 app.delete("/smacsById/:_id", smacsController);
 app.delete("/smacsByHash/:hash", smacsController);
+app.patch("/smacsById/:_id", smacsController);
+app.patch("/smacsByHash/:hash", smacsController);
 
 function smacsController(req, res, next) {
     const httpRequest = adaptRequest(req);
