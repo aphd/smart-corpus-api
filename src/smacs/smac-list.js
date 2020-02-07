@@ -8,7 +8,6 @@ export default function makeSmacList({ database }) {
         add,
         getItems,
         remove,
-        replace,
         update
     });
 
@@ -28,29 +27,17 @@ export default function makeSmacList({ database }) {
         ).map(documentToSmac);
     }
 
-    async function add({ smacId, ...smac }) {
+    async function add(postBody) {
         const db = await database;
-        if (smacId) {
-            smac._id = db.makeId(smacId);
-        }
         const { result, ops } = await db
             .collection(collection)
-            .insertOne(smac)
+            .insertMany(postBody)
             .catch(mongoError => {
-                const [errorCode] = mongoError.message.split(" ");
-                if (errorCode === "E11000") {
-                    const [_, mongoIndex] = mongoError.message
-                        .split(":")[2]
-                        .split(" ");
-                    throw new UniqueConstraintError(
-                        mongoIndex === "ContactEmailIndex" ? "hash" : "smacId"
-                    );
-                }
+                console.log("mongoError.message: ", mongoError.message);
                 throw mongoError;
             });
         return {
-            success: result.ok === 1,
-            created: documentToSmac(ops[0])
+            success: result.ok === 1
         };
     }
 
@@ -63,11 +50,16 @@ export default function makeSmacList({ database }) {
         return result.n;
     }
 
-    // todo:
-    async function replace(smac) {}
+    async function update(query, body) {
+        const db = await database;
+        if (query._id) {
+            query._id = db.makeId(query._id);
+        }
 
-    // todo:
-    async function update(smac) {}
+        return await db
+            .collection(collection)
+            .findOneAndUpdate(query, { $set: body }, {});
+    }
 
     function documentToSmac({ _id: smacId, ...doc }) {
         return makeSmac({ smacId, ...doc });

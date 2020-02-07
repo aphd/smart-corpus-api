@@ -4,7 +4,6 @@ import {
     RequiredParameterError
 } from "../helpers/errors";
 import makeHttpError from "../helpers/http-error";
-import makeSmac from "./smac";
 
 export default function makeSmacsEndpointHandler({ smacList }) {
     return async function handle(httpRequest) {
@@ -17,6 +16,9 @@ export default function makeSmacsEndpointHandler({ smacList }) {
 
             case "DELETE":
                 return deleteSmacs(httpRequest);
+
+            case "PATCH":
+                return updateSmac(httpRequest);
 
             default:
                 return makeHttpError({
@@ -51,28 +53,8 @@ export default function makeSmacsEndpointHandler({ smacList }) {
     }
 
     async function postSmac(httpRequest) {
-        let smacInfo = httpRequest.body;
-        if (!smacInfo) {
-            return makeHttpError({
-                statusCode: 400,
-                errorMessage: "Bad request. No POST body."
-            });
-        }
-
-        if (typeof httpRequest.body === "string") {
-            try {
-                smacInfo = JSON.parse(smacInfo);
-            } catch {
-                return makeHttpError({
-                    statusCode: 400,
-                    errorMessage: "Bad request. POST body must be valid JSON."
-                });
-            }
-        }
-
         try {
-            const smac = makeSmac(smacInfo);
-            const result = await smacList.add(smac);
+            const result = await smacList.add(httpRequest.body);
             return {
                 headers: {
                     "Content-Type": "application/json"
@@ -92,5 +74,18 @@ export default function makeSmacsEndpointHandler({ smacList }) {
                         : 500
             });
         }
+    }
+
+    async function updateSmac(httpRequest) {
+        console.log("updateSmac httpRequest: ", httpRequest);
+        const { pathParams, body } = httpRequest;
+        const result = await smacList.update(pathParams, body);
+        return {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            statusCode: 200,
+            data: JSON.stringify(result)
+        };
     }
 }
