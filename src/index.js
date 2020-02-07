@@ -2,9 +2,11 @@ import express from "express";
 import bodyParser from "body-parser";
 import handleSmacsRequest from "./smacs";
 import adaptRequest from "./helpers/adapt-request";
+import cors from "cors";
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 app.all("/smacs", smacsController);
 app.get("/smacsById/:_id", smacsController);
