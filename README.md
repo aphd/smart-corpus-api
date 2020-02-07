@@ -30,6 +30,13 @@ echo "PORT=<port>" >> .env
 npm run start
 ```
 
+### 4. Load smart contracts into mongoDB
+
+```bash
+node --experimental-modules src/utils/index.mjs
+```
+
+
 ### References
 
 <ol>
