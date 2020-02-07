@@ -8,7 +8,6 @@ export default function makeSmacList({ database }) {
         add,
         getItems,
         remove,
-        replace,
         update
     });
 
@@ -51,10 +50,6 @@ export default function makeSmacList({ database }) {
         return result.n;
     }
 
-    // todo:
-    async function replace(smac) {}
-
-    // todo:
     async function update(query, body) {
         const db = await database;
         if (query._id) {
