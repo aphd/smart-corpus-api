@@ -6,7 +6,6 @@ export default function smacPost(data, options) {
         console.log("statusCode:", res.statusCode);
         console.log("headers:", res.headers);
     });
-
     req.on("error", e => {
         console.error("errorerer\n\n", e);
     });

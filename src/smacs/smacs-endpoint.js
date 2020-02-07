@@ -4,7 +4,6 @@ import {
     RequiredParameterError
 } from "../helpers/errors";
 import makeHttpError from "../helpers/http-error";
-import makeSmac from "./smac";
 
 export default function makeSmacsEndpointHandler({ smacList }) {
     return async function handle(httpRequest) {
@@ -54,27 +53,7 @@ export default function makeSmacsEndpointHandler({ smacList }) {
     }
 
     async function postSmac(httpRequest) {
-        // if (!smacInfo) {
-        //     return makeHttpError({
-        //         statusCode: 400,
-        //         errorMessage: "Bad request. No POST body."
-        //     });
-        // }
-
-        // if (typeof httpRequest.body === "string") {
-        //     try {
-        //         smacInfo = JSON.parse(smacInfo);
-        //     } catch {
-        //         return makeHttpError({
-        //             statusCode: 400,
-        //             errorMessage: "Bad request. POST body must be valid JSON."
-        //         });
-        //     }
-        // }
-
         try {
-            // const smac = makeSmac(smacInfo);
-            console.log("smacInfo", httpRequest.body);
             const result = await smacList.add(httpRequest.body);
             return {
                 headers: {
