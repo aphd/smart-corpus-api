@@ -35,4 +35,4 @@ npm run start
 <ol>
   <li>Watch the companion video at: https://www.youtube.com/watch?v=fy6-LSE_zjI</li>
   <li>https://etherscan.io/apis#contracts</li>
-</ol>
+</ol> 
