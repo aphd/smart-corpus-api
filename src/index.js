@@ -42,5 +42,5 @@ httpServer.listen(process.env.HTTP_PORT, () =>
     console.log(`httpServer Listening on port ${process.env.HTTP_PORT}`)
 );
 httpsServer.listen(process.env.HTTPs_PORT, () =>
-    console.log(`httpServers Listening on port ${process.env.HTTPs_PORT}`)
+    console.log(`httpServers Listening on port ${process.env.HTTPS_PORT}`)
 );
