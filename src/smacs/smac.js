@@ -7,23 +7,26 @@ export default function makeSmac(smacInfo = requiredParam("smacInfo")) {
     const normalSmac = normalize(validSmac);
     return Object.freeze(normalSmac);
 
-    function validate({ hash = requiredParam("hash"), ...otherInfo } = {}) {
-        validateHash("hash", hash);
-        return { hash, ...otherInfo };
+    function validate({
+        address = requiredParam("address"),
+        ...otherInfo
+    } = {}) {
+        validateAddress("address", address);
+        return { address, ...otherInfo };
     }
 
-    function validateHash(label, hash) {
-        if (hash.length !== 42) {
+    function validateAddress(label, address) {
+        if (address.length !== 42) {
             throw new InvalidPropertyError(
-                `An ${label} must be 42 characters long. Yours is ${hash.length}`
+                `An ${label} must be 42 characters long. Yours is ${address.length}`
             );
         }
     }
 
-    function normalize({ hash, ...otherInfo }) {
+    function normalize({ address, ...otherInfo }) {
         return {
             ...otherInfo,
-            hash: upperFirst(hash)
+            address: upperFirst(address)
         };
     }
 }

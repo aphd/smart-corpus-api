@@ -7,7 +7,7 @@ export default function readCSV(fn, callback) {
         .pipe(csv())
         .on("data", data =>
             results.push({
-                hash: data["ContractAddress"],
+                address: data["ContractAddress"],
                 name: data["ContractName"]
             })
         )
