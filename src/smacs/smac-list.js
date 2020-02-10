@@ -24,7 +24,7 @@ export default function makeSmacList({ database }) {
                 .find(query)
                 .limit(Number(max))
                 .toArray()
-        ).map(documentToSmac);
+        ).map(makeSmac);
     }
 
     async function add(postBody) {
@@ -59,9 +59,5 @@ export default function makeSmacList({ database }) {
         return await db
             .collection(collection)
             .findOneAndUpdate(query, { $set: body }, {});
-    }
-
-    function documentToSmac({ _id: smacId, ...doc }) {
-        return makeSmac({ smacId, ...doc });
     }
 }
