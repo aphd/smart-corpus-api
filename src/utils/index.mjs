@@ -9,7 +9,7 @@ readCSV("/tmp/test.csv", data => {
     smacPost(JSON.stringify(data), {
         hostname: "localhost",
         port: process.env.PORT,
-        path: "/smacs",
+        path: "/adr",
         method: "POST",
         headers: {
             "Content-Type": "application/json"

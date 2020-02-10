@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.all("/smacs", smacsController);
+app.all("/adr", smacsController);
 app.get("/smacsById/:_id", smacsController);
 app.get("/smacsByHash/:hash", smacsController);
 app.delete("/smacsById/:_id", smacsController);
