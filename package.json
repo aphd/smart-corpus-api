@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "prestart": "npm run -s build",
-        "start": "nodemon dist/index.js",
+        "start": "node dist/index.js",
         "clean": "rimraf dist",
         "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist"
     },
@@ -18,9 +18,9 @@
         "csv-parser": "^2.3.2",
         "dotenv": "^8.2.0",
         "express": "^4.16.4",
+        "https": "^1.0.0",
         "mongodb": "^3.5.2",
-        "mongoose": "^5.8.10",
-        "nodemon": "^2.0.2"
+        "mongoose": "^5.8.10"
     },
     "devDependencies": {
         "@babel/cli": "^7.2.3",

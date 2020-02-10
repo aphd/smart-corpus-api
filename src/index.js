@@ -3,8 +3,17 @@ import bodyParser from "body-parser";
 import handleSmacsRequest from "./smacs";
 import adaptRequest from "./helpers/adapt-request";
 import cors from "cors";
+const fs = require("fs");
 
+const https = require("https");
+const http = require("http");
+const privateKey = fs.readFileSync(process.env.PRIVATE_KEY, "utf8");
+const certificate = fs.readFileSync(process.env.CERTIFICATE, "utf8");
+const credentials = { key: privateKey, cert: certificate };
 const app = express();
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -29,7 +38,9 @@ function smacsController(req, res, next) {
             console.log(next("handleSmacsRequest error", err));
         });
 }
-
-app.listen(process.env.PORT, () =>
-    console.log(`Listening on port ${process.env.PORT}`)
+httpServer.listen(process.env.HTTP_PORT, () =>
+    console.log(`httpServer Listening on port ${process.env.HTTP_PORT}`)
+);
+httpsServer.listen(process.env.HTTPs_PORT, () =>
+    console.log(`httpServers Listening on port ${process.env.HTTPs_PORT}`)
 );
