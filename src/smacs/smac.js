@@ -11,16 +11,15 @@ export default function makeSmac(smacInfo = requiredParam("smacInfo")) {
         address = requiredParam("address"),
         ...otherInfo
     } = {}) {
-        validateAddress("address", address);
+        address = validateAddress("address", address);
         return { address, ...otherInfo };
     }
 
     function validateAddress(label, address) {
         if (address.length !== 42) {
-            throw new InvalidPropertyError(
-                `An ${label} must be 42 characters long. Yours is ${address.length}`
-            );
+            return "0x" + address.split("_")[0];
         }
+        return address;
     }
 
     function normalize({ address, ...otherInfo }) {
