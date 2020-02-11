@@ -1,8 +1,21 @@
 import http from "http";
+import dotenv from "dotenv";
 
-export default function smacPost(data, options) {
+dotenv.config();
+
+const options = {
+    hostname: "localhost",
+    port: process.env.PORT,
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    }
+};
+
+export default function smacPost(data, path) {
+    options.path = "/" + path;
+
     const req = http.request(options, res => {
-        console.log(res);
         console.log("statusCode:", res.statusCode);
         console.log("headers:", res.headers);
     });
