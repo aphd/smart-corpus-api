@@ -8,13 +8,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.all("/adr", smacsController);
-app.get("/smacsById/:_id", smacsController);
-app.get("/smacsByHash/:hash", smacsController);
-app.delete("/smacsById/:_id", smacsController);
-app.delete("/smacsByHash/:hash", smacsController);
-app.patch("/smacsById/:_id", smacsController);
-app.patch("/smacsByHash/:hash", smacsController);
+app.all("/", smacsController);
+app.all("/byType/:Type", smacsController);
+app.all("/byCV/:CV", smacsController);
 
 function smacsController(req, res, next) {
     const httpRequest = adaptRequest(req);
@@ -26,7 +22,7 @@ function smacsController(req, res, next) {
                 .send(data)
         )
         .catch(err => {
-            console.log(next("handleSmacsRequest error", err));
+            console.log(next("handleSmacsRequest error: ", err));
         });
 }
 
