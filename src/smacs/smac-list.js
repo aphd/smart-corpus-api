@@ -14,10 +14,9 @@ export default function makeSmacList({ database }) {
     async function getItems(query) {
         const db = await database;
         const max = 100;
-        if (query._id) {
-            query._id = db.makeId(query._id);
+        if (query.object) {
+            query = JSON.parse(query.object);
         }
-
         return (
             await db
                 .collection(collection)
