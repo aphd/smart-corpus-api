@@ -1,8 +1,3 @@
-import {
-    UniqueConstraintError,
-    InvalidPropertyError,
-    RequiredParameterError
-} from "../helpers/errors";
 import makeHttpError from "../helpers/http-error";
 
 export default function makeSmacsEndpointHandler({ smacList }) {
@@ -64,14 +59,7 @@ export default function makeSmacsEndpointHandler({ smacList }) {
             };
         } catch (e) {
             return makeHttpError({
-                errorMessage: e.message,
-                statusCode:
-                    e instanceof UniqueConstraintError
-                        ? 409
-                        : e instanceof InvalidPropertyError ||
-                          e instanceof RequiredParameterError
-                        ? 400
-                        : 500
+                errorMessage: e.message
             });
         }
     }

@@ -14,14 +14,13 @@ app.all("/object/:object", smacsController);
 function smacsController(req, res, next) {
     const httpRequest = adaptRequest(req);
     handleSmacsRequest(httpRequest)
-        .then(({ headers, statusCode, data }) =>
-            res
-                .set(headers)
+        .then(({ headers, statusCode, data }) => {
+            res.set(headers)
                 .status(statusCode)
-                .send(data)
-        )
+                .send(data);
+        })
         .catch(err => {
-            console.log(next("handleSmacsRequest error: ", err));
+            console.error(next("handleSmacsRequest error: ", err.stack));
         });
 }
 
