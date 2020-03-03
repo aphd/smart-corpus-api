@@ -12,9 +12,8 @@ const options = {
     }
 };
 
-export default function smacPost(data, path) {
-    options.path = "/" + path;
-
+export default function smacPost(data) {
+    options.path = "/";
     const req = http.request(options, res => {
         console.log("statusCode:", res.statusCode);
         console.log("headers:", res.headers);

@@ -1,6 +1,3 @@
-import makeSmac from "./smac";
-import { UniqueConstraintError } from "../helpers/errors";
-
 export default function makeSmacList({ database }) {
     const collection = "smacs";
 
@@ -13,17 +10,16 @@ export default function makeSmacList({ database }) {
 
     async function getItems(query) {
         const db = await database;
-        const max = 100;
+        const max = 300;
         if (query.object) {
             query = JSON.parse(query.object);
         }
-        return (
-            await db
-                .collection(collection)
-                .find(query)
-                .limit(Number(max))
-                .toArray()
-        ).map(makeSmac);
+
+        return await db
+            .collection(collection)
+            .find(query)
+            .limit(Number(max))
+            .toArray();
     }
 
     async function add(postBody) {
