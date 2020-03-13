@@ -1,5 +1,5 @@
 import axios from "axios";
-import { readAddresses, download, paso } from "./index.mjs";
+import { readAddresses, download, writeMetrics } from "./index.mjs";
 
 // TODO to take from config-file
 const server = "http://localhost:8080/";
@@ -9,7 +9,7 @@ const source =
 const post_addresses = function() {
     const columns_to_skip = ["Txhash"];
     readAddresses(columns_to_skip).then(result =>
-        axios.post(server, result).catch(error => console.log(error))
+        axios.post(server, result).catch(e => console.log(e))
     );
 };
 
@@ -28,14 +28,17 @@ const download_contracts = function() {
 };
 
 const write_metrics = function() {
-    axios.get(server).then(function(response) {
-        response.data.forEach(e => {
-            const address = e.contractAddress.toLowerCase();
-            console.log(address);
-        });
-    });
+    axios
+        .get(server)
+        .then(function(response) {
+            response.data.forEach(e => {
+                let { dir, fn } = url_dir_fn(e.contractAddress.toLowerCase());
+                writeMetrics(dir + fn);
+            });
+        })
+        .catch(e => console.log(e));
 };
 
 //post_addresses();
-download_contracts();
-//write_metrics();
+//download_contracts();
+write_metrics();
