@@ -24,7 +24,6 @@ export default function readAddresses(columns_to_skip) {
                 })
             )
             .on("data", data => {
-                // data["address"] = "0x" + data["SolidityFile"].split("_")[0];
                 results.push(data);
             })
             .on("end", () => {
