@@ -13,6 +13,7 @@
     "author": "Bill Sourour (Dev Mastery)",
     "license": "ISC",
     "dependencies": {
+        "axios": "^0.19.2",
         "body-parser": "^1.18.3",
         "cors": "^2.8.5",
         "csv-parser": "^2.3.2",
