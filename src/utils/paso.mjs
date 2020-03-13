@@ -3,9 +3,6 @@ import parse from "solidity-parser-diligence/dist";
 export default function paso(code) {
     const ast_j = parse.parse(code, { loc: true });
     const ast_s = JSON.stringify(ast_j);
-    try {
-        window.ast_j = ast_j;
-    } catch {}
 
     const metrics = {
         mapping: '"type":"Mapping"',
@@ -25,10 +22,10 @@ export default function paso(code) {
         comments: get_comments(code),
         blanks: code.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm).length
     };
-    for (const metric in metrics) {
-        let reg = metrics[metric];
-        result[metric] = (ast_s.match(new RegExp(reg, "g")) || []).length;
-    }
+
+    Object.entries(metrics).forEach(([key, value]) => {
+        result[key] = (ast_s.match(new RegExp(value, "g")) || []).length;
+    });
 
     return result;
 }
