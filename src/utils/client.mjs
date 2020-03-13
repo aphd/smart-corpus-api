@@ -4,18 +4,11 @@ import readCSV from "./read-csv.mjs";
 import download from "./download.mjs";
 
 const read_csv = function() {
-    const w_callback = data => {
-        postRequest(JSON.stringify(data));
-    };
     // readCSV("/tmp/smec.test.csv", w_callback); // https://github.com/aphd/solidity-metrics/blob/master/examples/smec.csv
-
     readCSV(
         "./src/csv/export-verified-contractaddress-opensource-license.csv",
-        {
-            callback: w_callback,
-            columns_to_skip: ["Txhash"]
-        }
-    );
+        ["Txhash"]
+    ).then(result => console.log(result));
 };
 
 const download_contracts = function() {
@@ -31,4 +24,4 @@ const download_contracts = function() {
     });
 };
 
-download_contracts();
+read_csv();
