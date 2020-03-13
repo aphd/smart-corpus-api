@@ -5,7 +5,8 @@ import download from "./download.mjs";
 
 const read_csv = function() {
     const w_callback = data => {
-        postRequest(JSON.stringify(data));
+        console.log(data);
+        // postRequest(JSON.stringify(data));
     };
     // readCSV("/tmp/smec.test.csv", w_callback); // https://github.com/aphd/solidity-metrics/blob/master/examples/smec.csv
 
@@ -31,4 +32,4 @@ const download_contracts = function() {
     });
 };
 
-download_contracts();
+read_csv();
