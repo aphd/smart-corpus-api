@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.all("/", smacsController);
-app.all("/object/:object", smacsController);
+app.all("/:object", smacsController);
 
 function smacsController(req, res, next) {
     const httpRequest = adaptRequest(req);
