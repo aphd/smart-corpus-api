@@ -7,8 +7,7 @@ const source =
     "https://api.etherscan.io/api?module=contract&action=getsourcecode&address=";
 
 const post_addresses = function() {
-    const columns_to_skip = ["Txhash"];
-    readAddresses(columns_to_skip).then(result =>
+    readAddresses(["Txhash"]).then(result =>
         axios.post(server, result).catch(e => console.log(e))
     );
 };

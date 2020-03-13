@@ -3,7 +3,6 @@ import parse from "solidity-parser-diligence/dist";
 export default function paso(code) {
     const ast_j = parse.parse(code, { loc: true });
     const ast_s = JSON.stringify(ast_j);
-
     const metrics = {
         mapping: '"type":"Mapping"',
         functions: '"type":"FunctionDefinition"',
