@@ -1,3 +1,4 @@
+// TODO to remove, you can use just axios
 import http from "http";
 import dotenv from "dotenv";
 
@@ -12,7 +13,7 @@ const options = {
     }
 };
 
-export default function smacPost(data) {
+export default function postRequest(data) {
     options.path = "/";
     const req = http.request(options, res => {
         console.log("statusCode:", res.statusCode);
