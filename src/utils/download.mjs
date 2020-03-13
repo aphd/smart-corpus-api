@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export default function download(url, dir, fn, cb) {
+export default function download(parameters) {
+    let { url, dir, fn } = parameters;
     !fs.existsSync(dir) && fs.mkdirSync(dir);
     const dest = dir + fn;
     if (fs.existsSync(dest)) return 0;
@@ -12,8 +13,6 @@ export default function download(url, dir, fn, cb) {
     url = `${url}&apikey=${process.env.API_KEY}`;
     https.get(url, function(response) {
         response.pipe(file);
-        file.on("finish", function() {
-            file.close(cb); // close() is async, call cb after close completes.
-        });
+        file.on("finish", () => console.log(url));
     });
 }
