@@ -1,11 +1,14 @@
 import csv from "csv-parser";
 import fs from "fs";
 
-export default function readCSV(fn, columns_to_skip) {
+const verified_address =
+    "./src/csv/export-verified-contractaddress-opensource-license.csv";
+
+export default function readAddresses(columns_to_skip) {
     const results = [];
     return new Promise(resolve =>
         fs
-            .createReadStream(fn)
+            .createReadStream(verified_address)
             .pipe(
                 csv({
                     mapHeaders: ({ header, index }) => {
@@ -21,7 +24,6 @@ export default function readCSV(fn, columns_to_skip) {
                 })
             )
             .on("data", data => {
-                // data["address"] = "0x" + data["SolidityFile"].split("_")[0];
                 results.push(data);
             })
             .on("end", () => {
