@@ -1,33 +1,41 @@
 import axios from "axios";
-import readCSV from "./read-csv.mjs";
-import download from "./download.mjs";
+import { readAddresses, download, paso } from "./index.mjs";
 
 // TODO to take from config-file
 const server = "http://localhost:8080/";
 const source =
     "https://api.etherscan.io/api?module=contract&action=getsourcecode&address=";
-const verified_address =
-    "./src/csv/export-verified-contractaddress-opensource-license.csv";
 
 const post_addresses = function() {
-    const [fn, columns_to_skip] = [verified_address, ["Txhash"]];
-    readCSV(fn, columns_to_skip).then(result =>
+    const columns_to_skip = ["Txhash"];
+    readAddresses(columns_to_skip).then(result =>
         axios.post(server, result).catch(error => console.log(error))
     );
 };
 
+const url_dir_fn = address => ({
+    url: `${source}${address}`,
+    dir: `./src/json/${address.substring(0, 4)}/`,
+    fn: `${address}.json`
+});
+
 const download_contracts = function() {
-    const options = address => ({
-        url: `${source}${address}`,
-        dir: `./src/json/${address.substring(0, 4)}/`,
-        fn: `${address}.json`
-    });
     axios.get(server).then(function(response) {
         response.data.forEach(e =>
-            download(options(e.contractAddress.toLowerCase()))
+            download(url_dir_fn(e.contractAddress.toLowerCase()))
         );
     });
 };
 
-post_addresses();
-// download_contracts();
+const write_metrics = function() {
+    axios.get(server).then(function(response) {
+        response.data.forEach(e => {
+            const address = e.contractAddress.toLowerCase();
+            console.log(address);
+        });
+    });
+};
+
+//post_addresses();
+download_contracts();
+//write_metrics();
