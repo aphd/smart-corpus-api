@@ -1,5 +1,5 @@
 export default function makeSmacList({ database }) {
-    const collection = "smacs";
+    const collection = "contract";
 
     return Object.freeze({
         add,
