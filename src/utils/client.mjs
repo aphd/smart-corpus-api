@@ -12,10 +12,10 @@ const post_addresses = function() {
     );
 };
 
-const url_dir_fn = address => ({
-    url: `${source}${address}`,
-    dir: `./src/json/${address.substring(0, 4)}/`,
-    fn: `${address}.json`
+const url_dir_fn = contractAddress => ({
+    url: `${source}${contractAddress}`,
+    dir: `./src/json/${contractAddress.substring(0, 4)}/`,
+    fn: `${contractAddress}.json`
 });
 
 const download_contracts = function() {
@@ -31,13 +31,14 @@ const write_metrics = function() {
         .get(server)
         .then(function(response) {
             response.data.forEach(e => {
-                let { dir, fn } = url_dir_fn(e.contractAddress.toLowerCase());
-                writeMetrics(dir + fn);
+                const contractAddress = e.contractAddress.toLowerCase();
+                let { dir, fn } = url_dir_fn(contractAddress);
+                writeMetrics(dir + fn, contractAddress);
             });
         })
         .catch(e => console.log(e));
 };
 
-//post_addresses();
+//post_addresses(); #create address entries in mongodb
 //download_contracts();
 write_metrics();
