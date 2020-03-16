@@ -17,6 +17,7 @@ const get_json_metrics_from_sol = dest =>
 
 export default function writeMetrics(dest) {
     get_json_metrics_from_sol(dest).then(data => {
+        data.contractAddress = dest.match("0x[a-z0-9']{40}")[0];
         const csv = new ObjectsToCsv([data]);
         csv.toDisk(fn_metric, { append: true }); // Save to file:
     });
