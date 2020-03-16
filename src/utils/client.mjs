@@ -2,7 +2,7 @@ import axios from "axios";
 import { readAddresses, download, writeMetrics } from "./index.mjs";
 
 // TODO to take from config-file
-const server = "http://localhost:8080/";
+const server = 'http://localhost:8080/{"contractName":"Airdropper"}';
 const source =
     "https://api.etherscan.io/api?module=contract&action=getsourcecode&address=";
 
@@ -38,6 +38,6 @@ const write_metrics = function() {
         .catch(e => console.log(e));
 };
 
-//post_addresses();
+//post_addresses(); #create address entries in mongodb
 //download_contracts();
 write_metrics();
