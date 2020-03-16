@@ -2,7 +2,7 @@ import axios from "axios";
 import { readAddresses, download, writeMetrics } from "./index.mjs";
 
 // TODO to take from config-file
-const server = 'http://localhost:8080/{"contractName":"Airdropper"}';
+const server = "http://localhost:8080/";
 const source =
     "https://api.etherscan.io/api?module=contract&action=getsourcecode&address=";
 
@@ -12,10 +12,10 @@ const post_addresses = function() {
     );
 };
 
-const url_dir_fn = address => ({
-    url: `${source}${address}`,
-    dir: `./src/json/${address.substring(0, 4)}/`,
-    fn: `${address}.json`
+const url_dir_fn = contractAddress => ({
+    url: `${source}${contractAddress}`,
+    dir: `./src/json/${contractAddress.substring(0, 4)}/`,
+    fn: `${contractAddress}.json`
 });
 
 const download_contracts = function() {
@@ -31,8 +31,9 @@ const write_metrics = function() {
         .get(server)
         .then(function(response) {
             response.data.forEach(e => {
-                let { dir, fn } = url_dir_fn(e.contractAddress.toLowerCase());
-                writeMetrics(dir + fn);
+                const contractAddress = e.contractAddress.toLowerCase();
+                let { dir, fn } = url_dir_fn(contractAddress);
+                writeMetrics(dir + fn, contractAddress);
             });
         })
         .catch(e => console.log(e));
