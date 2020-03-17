@@ -1,5 +1,4 @@
-import readAddresses from "./read-adresses.mjs";
-import download from "./download.mjs";
-import writeMetrics from "./write-metrics.mjs";
+import delayLoop from "./delay-loop.mjs";
+import urlDirFn from "./url-dir-fn.mjs";
 
-export { readAddresses, download, writeMetrics };
+export { delayLoop, urlDirFn };
