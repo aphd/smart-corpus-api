@@ -8,7 +8,7 @@ const source =
 
 const post_addresses = function() {
     readAddresses(["Txhash"]).then(result =>
-        axios.post(server, result).catch(e => console.log(e))
+        axios.post(server, result).catch(e => console.log(e.response.data))
     );
 };
 
@@ -39,6 +39,6 @@ const write_metrics = function() {
         .catch(e => console.log(e));
 };
 
-//post_addresses(); #create address entries in mongodb
+post_addresses(); //create address entries in mongodb
 //download_contracts();
-write_metrics();
+//write_metrics();
