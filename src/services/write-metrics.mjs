@@ -22,6 +22,7 @@ const getSourceCode = data => {
 };
 
 // get metrics from solidity source code
+// TODO the module should be renamed handleMetric and you need to export get_json_metrics_from_sol for the PASO client
 const get_json_metrics_from_sol = dest =>
     new Promise(resolve =>
         fs.readFile(dest, (err, data) => {
