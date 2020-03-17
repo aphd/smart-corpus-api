@@ -7,7 +7,7 @@ const verified_address =
 
 const server = "http://localhost:8080/";
 
-export default function post_verified_addresses() {
+export default function postVerifiedAddresses() {
     readAddresses(["Txhash"]).then(result =>
         axios.post(server, result).catch(e => console.log(e.response.data))
     );
