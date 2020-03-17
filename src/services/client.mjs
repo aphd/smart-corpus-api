@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-    postVerifiedAddresses,
-    downloadContracts,
-    writeMetrics
-} from "./index.mjs";
+import { postAddresses, downloadContracts, writeMetrics } from "./index.mjs";
 
 // TODO to take from config-file
 
@@ -19,6 +15,6 @@ const write_metrics = function() {
         })
         .catch(e => console.log(e));
 };
-// postVerifiedAddresses();
+// postAddresses();
 downloadContracts();
-// write_metrics();
+//write_metrics();
