@@ -1,10 +1,19 @@
 import csv from "csv-parser";
 import fs from "fs";
+import axios from "axios";
 
 const verified_address =
     "./src/csv/export-verified-contractaddress-opensource-license.csv";
 
-export default function readAddresses(columns_to_skip) {
+const server = "http://localhost:8080/";
+
+export default function post_verified_addresses() {
+    readAddresses(["Txhash"]).then(result =>
+        axios.post(server, result).catch(e => console.log(e.response.data))
+    );
+}
+
+const readAddresses = columns_to_skip => {
     const results = [];
     return new Promise(resolve =>
         fs
@@ -30,4 +39,4 @@ export default function readAddresses(columns_to_skip) {
                 resolve(results);
             })
     );
-}
+};
