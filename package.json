@@ -1,5 +1,6 @@
 {
     "name": "express-api",
+    "type": "module",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -38,17 +39,5 @@
     "jest": {
         "verbose": true,
         "testRegex": ".spec.js"
-    },
-    "babel": {
-        "presets": [
-            [
-                "@babel/env",
-                {
-                    "targets": {
-                        "node": "10.8.0"
-                    }
-                }
-            ]
-        ]
     }
 }
