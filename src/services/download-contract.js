@@ -1,12 +1,12 @@
 import https from "https";
 import fs from "fs";
 import dotenv from "dotenv";
-import { delayLoop, urlDirFn } from "../utils/index.mjs";
-import { getAddresses } from "./index.mjs";
+import { delayLoop, urlDirFn } from "../utils/index.js";
+import { getAddresses } from "./index.js";
 
 dotenv.config();
 
-export default function downloadContracts() {
+export function downloadContracts() {
     getAddresses().then(addresses =>
         addresses.data.forEach(
             delayLoop(
@@ -15,6 +15,11 @@ export default function downloadContracts() {
             )
         )
     );
+}
+
+export function getSourceCode(address) {
+    console.log(address);
+    return address;
 }
 
 const download = url_dir_fn => {

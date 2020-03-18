@@ -1,4 +1,4 @@
-import makeHttpError from "../helpers/http-error";
+import makeHttpError from "../helpers/http-error.js";
 
 export default function makeSmacsEndpointHandler({ smacList }) {
     return async function handle(httpRequest) {
