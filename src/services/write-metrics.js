@@ -1,28 +1,11 @@
-import paso from "./paso";
+import paso from "./paso.js";
 import fs from "fs";
 import ObjectsToCsv from "objects-to-csv";
-import { getAddresses } from "./index.mjs";
-import { urlDirFn } from "../utils/index.mjs";
+import { getAddresses } from "./index.js";
 
 // TODO import from a conf file
 const fn_metric = "./src/csv/paso_metric.csv";
 
-const getSourceCode = data => {
-    const sourceCode = JSON.parse(data).result[0].SourceCode;
-    try {
-        const nestedSourceCode = JSON.parse(sourceCode);
-        return nestedSourceCode[
-            Object.keys(nestedSourceCode)[
-                Object.keys(nestedSourceCode).length - 1
-            ]
-        ].content;
-    } catch {
-        return sourceCode;
-    }
-};
-
-// get metrics from solidity source code
-// TODO the module should be renamed handleMetric and you need to export get_json_metrics_from_sol for the PASO client
 const get_json_metrics_from_sol = dest =>
     new Promise(resolve =>
         fs.readFile(dest, (err, data) => {
