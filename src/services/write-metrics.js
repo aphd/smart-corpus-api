@@ -1,8 +1,8 @@
-import paso from "./paso";
+import paso from "./paso.js";
 import fs from "fs";
 import ObjectsToCsv from "objects-to-csv";
-import { getAddresses } from "./index.mjs";
-import { urlDirFn } from "../utils/index.mjs";
+import { getAddresses } from "./index.js";
+import { urlDirFn } from "../utils/index.js";
 
 // TODO import from a conf file
 const fn_metric = "./src/csv/paso_metric.csv";

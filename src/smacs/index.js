@@ -1,6 +1,6 @@
-import makeDb from "../db";
-import makeSmacList from "./smac-list";
-import makeSmacsEndpointHandler from "./smacs-endpoint";
+import makeDb from "../db/index.js";
+import makeSmacList from "./smac-list.js";
+import makeSmacsEndpointHandler from "./smacs-endpoint.js";
 
 const database = makeDb();
 const smacList = makeSmacList({ database });
