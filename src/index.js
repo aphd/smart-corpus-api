@@ -1,10 +1,20 @@
 import express from "express";
 import bodyParser from "body-parser";
-import handleSmacsRequest from "./smacs";
-import adaptRequest from "./helpers/adapt-request";
+import handleSmacsRequest from "./smacs/index.js";
+import adaptRequest from "./helpers/adapt-request.js";
 import cors from "cors";
+import { getContractData } from "./services/index.js";
+import { getSourceCode } from "./utils/index.js";
 
 const app = express();
+
+app.get("/getSourceCode/:address", function(req, res) {
+    getContractData(req.params.address)
+        .then(r => {
+            res.json({ sourceCode: getSourceCode(r.data || JSON.parse(r)) });
+        })
+        .catch(e => res.json({ error: e }));
+});
 app.use(bodyParser.json());
 app.use(cors());
 
