@@ -1,21 +1,16 @@
 import https from "https";
 import fs from "fs";
 import dotenv from "dotenv";
-import { delayLoop } from "../utils/index.js";
+import {
+    delayLoop,
+    getUrlFromAddr,
+    getDirFromAddr,
+    getDestFromAddr
+} from "../utils/index.js";
 import { getAddresses } from "./index.js";
+import axios from "axios";
 
 dotenv.config();
-
-const source =
-    "https://api.etherscan.io/api?module=contract&action=getsourcecode&address=";
-
-const getUrlFromAddress = contractAddress =>
-    `${source}${contractAddress}&apikey=${process.env.API_KEY}`;
-
-const dirFn = contractAddress => ({
-    dir: `./src/json/${contractAddress.substring(0, 4)}/`,
-    fn: `${contractAddress}.json`
-});
 
 export function downloadContracts() {
     getAddresses().then(addresses =>
@@ -25,16 +20,20 @@ export function downloadContracts() {
     );
 }
 
-export function getSourceCode(address) {
-    let url = dirFn(address);
-    console.log(url);
-    return address;
+export function getContractData(contractAddress) {
+    const dest = getDestFromAddr(contractAddress);
+    console.log(dest);
+    if (fs.existsSync(dest)) {
+        return fs.promises.readFile(dest, "utf8");
+    }
+    console.log(getUrlFromAddr(contractAddress));
+    return axios.get(getUrlFromAddr(contractAddress));
 }
 
 const download = contractAddress => {
-    let { dir, fn } = dirFn(contractAddress);
-    const dest = dir + fn;
-    const url = getUrlFromAddress(contractAddress);
+    const url = getUrlFromAddr(contractAddress);
+    const dir = getDirFromAddr(contractAddress);
+    const dest = getDestFromAddr(contractAddress);
 
     !fs.existsSync(dir) && fs.mkdirSync(dir);
     if (fs.existsSync(dest)) return 0;
