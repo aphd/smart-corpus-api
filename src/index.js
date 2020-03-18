@@ -3,12 +3,15 @@ import bodyParser from "body-parser";
 import handleSmacsRequest from "./smacs/index.js";
 import adaptRequest from "./helpers/adapt-request.js";
 import cors from "cors";
-import { getSourceCode } from "./services/index.js";
+import { getContractData } from "./services/index.js";
+import { getSourceCode } from "./utils/index.js";
 
 const app = express();
 
 app.get("/getSourceCode/:address", function(req, res) {
-    res.json({ sourceCode: getSourceCode(req.params.address) });
+    getContractData(req.params.address)
+        .then(r => res.json({ sourceCode: getSourceCode(r) }))
+        .catch(e => res.json({ error: e }));
 });
 app.use(bodyParser.json());
 app.use(cors());
