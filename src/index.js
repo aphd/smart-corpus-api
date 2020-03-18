@@ -10,7 +10,9 @@ const app = express();
 
 app.get("/getSourceCode/:address", function(req, res) {
     getContractData(req.params.address)
-        .then(r => res.json({ sourceCode: getSourceCode(r) }))
+        .then(r => {
+            res.json({ sourceCode: getSourceCode(r.data || JSON.parse(r)) });
+        })
         .catch(e => res.json({ error: e }));
 });
 app.use(bodyParser.json());
