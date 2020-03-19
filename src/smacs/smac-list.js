@@ -10,7 +10,7 @@ export default function makeSmacList({ database }) {
 
     async function getItems(query) {
         const db = await database;
-        const max = 300;
+        // const MAX_ITEMS = 1000;
         if (query.object) {
             query = JSON.parse(query.object);
         }
@@ -18,7 +18,7 @@ export default function makeSmacList({ database }) {
         return await db
             .collection(collection)
             .find(query)
-            .limit(Number(max))
+            // .limit(Number(MAX_ITEMS))
             .toArray();
     }
 
