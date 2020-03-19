@@ -36,10 +36,25 @@ npm run start
 node --experimental-modules src/utils/client.mjs
 ```
 
+### How to Compress/Extract contracts files
+
+To compress the smart contracts' data
+
+```bash
+cd src/
+7z a -t7z json.7z json
+```
+
+To extract the smart contracts' data
+
+```bash
+cd data
+7z e json.7z
+```
 
 ### References
 
 <ol>
   <li>Watch the companion video at: https://www.youtube.com/watch?v=fy6-LSE_zjI</li>
   <li>https://etherscan.io/apis#contracts</li>
-</ol> 
+</ol>
