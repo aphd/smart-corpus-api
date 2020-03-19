@@ -1,5 +1,4 @@
-// import parse from "solidity-parser-diligence/dist";
-const parse = function() {};
+import parse from "solidity-parser-diligence/dist/index.js";
 
 export default function paso(code) {
     const ast_j = parse.parse(code, { loc: true });
