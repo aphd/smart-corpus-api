@@ -4,9 +4,12 @@ import ObjectsToCsv from "objects-to-csv";
 import { getAddresses } from "./index.js";
 import { getDestFromAddr } from "../utils/index.js";
 import { getSourceCode } from "../utils/index.js";
+import csv from "csvtojson";
+import axios from "axios";
 
 // TODO import from a conf file
 const fn_metric = "./src/csv/contracts-metrics.csv";
+const server = "http://localhost:8080/";
 
 const getJsonMetricsFromSol = dest =>
     new Promise(resolve =>
@@ -25,8 +28,13 @@ const writeMetricsOfOneContract = contractAddress => {
         getJsonMetricsFromSol(dest).then(data => {
             data.contractAddress = contractAddress;
             const csv = new ObjectsToCsv([data]);
-            csv.toDisk(fn_metric, { append: true }); // Save to file:
+            console.log(dest);
+            csv.toDisk(fn_metric, { append: true, header: false });
         });
+};
+
+const readMetricsFromFn = () => {
+    return csv().fromFile(fn_metric);
 };
 
 export function writeMetrics() {
@@ -40,5 +48,10 @@ export function writeMetrics() {
 }
 
 export function postMetrics() {
-    console.log(fn_metric);
+    readMetricsFromFn()
+        .then(result => {
+            console.log(result);
+            axios.post(server, result).catch(e => console.log(e));
+        })
+        .catch(e => console.log("error from readMetricsFromFn", e));
 }

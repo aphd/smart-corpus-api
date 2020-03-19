@@ -1,5 +1,11 @@
-import { postAddresses, downloadContracts, writeMetrics } from "./index.js";
+import {
+    postAddresses,
+    postMetrics,
+    downloadContracts,
+    writeMetrics
+} from "./index.js";
 
-postAddresses();
+// postAddresses();
 // downloadContracts();
-// writeMetrics();
+//writeMetrics();
+postMetrics();
