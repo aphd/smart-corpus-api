@@ -35,8 +35,8 @@ const download = contractAddress => {
     const dir = getDirFromAddr(contractAddress);
     const dest = getDestFromAddr(contractAddress);
 
-    !fs.existsSync(dir) && fs.mkdirSync(dir);
     if (fs.existsSync(dest)) return 0;
+    !fs.existsSync(dir) && fs.mkdirSync(dir);
     let file = fs.createWriteStream(dest);
 
     https.get(url, function(response) {

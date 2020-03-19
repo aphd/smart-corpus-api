@@ -9,7 +9,7 @@ const server = "http://localhost:8080/";
 
 export function postAddresses() {
     readAddressesFromFn(["Txhash"]).then(result =>
-        axios.post(server, result).catch(e => console.log(e.response.data))
+        axios.post(server, result).catch(e => console.log(e))
     );
 }
 
