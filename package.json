@@ -18,6 +18,7 @@
         "body-parser": "^1.18.3",
         "cors": "^2.8.5",
         "csv-parser": "^2.3.2",
+        "csvtojson": "^2.0.10",
         "dotenv": "^8.2.0",
         "express": "^4.16.4",
         "mongodb": "^3.5.2",

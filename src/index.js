@@ -7,6 +7,7 @@ import { getContractData } from "./services/index.js";
 import { getSourceCode } from "./utils/index.js";
 
 const app = express();
+app.use(express.json({ limit: "150mb" }));
 
 app.get("/getSourceCode/:address", function(req, res) {
     getContractData(req.params.address)
