@@ -1,5 +1,6 @@
 export default function makeSmacList({ database }) {
-    const collection = "contract";
+    //TODO it needs to be parameterized
+    const collection = "metrics";
 
     return Object.freeze({
         add,
