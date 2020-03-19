@@ -28,7 +28,6 @@ const writeMetricsOfOneContract = contractAddress => {
         getJsonMetricsFromSol(dest).then(data => {
             data.contractAddress = contractAddress;
             const csv = new ObjectsToCsv([data]);
-            console.log(dest);
             csv.toDisk(fn_metric, { append: true, header: false });
         });
 };
@@ -50,7 +49,6 @@ export function writeMetrics() {
 export function postMetrics() {
     readMetricsFromFn()
         .then(result => {
-            console.log(result);
             axios.post(server, result).catch(e => console.log(e));
         })
         .catch(e => console.log("error from readMetricsFromFn", e));
