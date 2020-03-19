@@ -1,4 +1,4 @@
-# Smac Corpus API - A clean RESTful API with Node.js
+# Smac Corpus API - A RESTful API with Node.js
 
 ## Prerequisites
 
