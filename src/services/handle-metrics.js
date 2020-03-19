@@ -29,7 +29,7 @@ const writeMetricsOfOneContract = contractAddress => {
         });
 };
 
-export default function writeMetrics() {
+export function writeMetrics() {
     getAddresses()
         .then(function(response) {
             response.data.forEach(e => {
@@ -37,4 +37,8 @@ export default function writeMetrics() {
             });
         })
         .catch(e => console.log(e));
+}
+
+export function postMetrics() {
+    console.log(fn_metric);
 }
