@@ -33,7 +33,7 @@ const writeMetricsOfOneContract = contractAddress => {
 };
 
 const readMetricsFromFn = () => {
-    return csv().fromFile(fn_metric);
+    return csv({ checkType: true }).fromFile(fn_metric);
 };
 
 export function writeMetrics() {
