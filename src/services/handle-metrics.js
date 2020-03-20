@@ -8,7 +8,7 @@ import csv from "csvtojson";
 import axios from "axios";
 
 // TODO import from a conf file
-const fn_metric = "./src/csv/contracts-metrics.csv";
+const fn_metric = "./src/csv/metrics.csv";
 const server = "http://localhost:8080/";
 
 const getJsonMetricsFromSol = dest =>
