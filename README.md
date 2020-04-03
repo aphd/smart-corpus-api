@@ -49,7 +49,7 @@ To extract the smart contracts' data
 
 ```bash
 cd data
-7z e json.7z
+7za  x json.7z
 ```
 
 ### References
