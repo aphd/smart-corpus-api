@@ -33,7 +33,7 @@ npm run start
 ### 4. Load smart contracts into mongoDB
 
 ```bash
-node --experimental-modules src/utils/client.mjs
+node --experimental-modules src/services/client.mjs
 ```
 
 ### How to Compress/Extract contracts files
@@ -49,7 +49,7 @@ To extract the smart contracts' data
 
 ```bash
 cd data
-7z e json.7z
+7za  x json.7z
 ```
 
 ### References
