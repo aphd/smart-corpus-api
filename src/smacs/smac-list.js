@@ -6,7 +6,7 @@ export default function makeSmacList({ database }) {
         add,
         getItems,
         remove,
-        update
+        update,
     });
 
     async function getItems(query) {
@@ -28,12 +28,12 @@ export default function makeSmacList({ database }) {
         const { result, ops } = await db
             .collection(collection)
             .insertMany(postBody)
-            .catch(mongoError => {
+            .catch((mongoError) => {
                 console.log("mongoError.message: ", mongoError.message);
                 throw mongoError;
             });
         return {
-            success: result.ok === 1
+            success: result.ok === 1,
         };
     }
 
