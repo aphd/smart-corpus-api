@@ -1,17 +1,17 @@
-import delayLoop from "./delay-loop.js";
 import {
     getFnFromAddr,
     getDirFromAddr,
     getDestFromAddr,
     getSourceCode,
-    getUrlFromAddr
+    getUrlFromAddr,
 } from "./handle-contract-data.js";
+import getContracts from "./getContracts.js";
 
 export {
-    delayLoop,
+    getContracts,
     getFnFromAddr,
     getDirFromAddr,
     getDestFromAddr,
     getSourceCode,
-    getUrlFromAddr
+    getUrlFromAddr,
 };

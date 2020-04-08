@@ -1,6 +1,8 @@
 const source =
     "https://api.etherscan.io/api?module=contract&action=getsourcecode&address=";
 
+const contractDir = "./data/contracts/";
+
 export function getUrlFromAddr(contractAddress) {
     return `${source}${contractAddress}&apikey=${process.env.API_KEY}`;
 }
@@ -10,7 +12,7 @@ export function getFnFromAddr(contractAddress) {
 }
 
 export function getDirFromAddr(contractAddress) {
-    return `./src/json/${contractAddress.substring(0, 4)}/`;
+    return `${contractDir}/${contractAddress.substring(0, 4)}/`;
 }
 
 export function getDestFromAddr(contractAddress) {
