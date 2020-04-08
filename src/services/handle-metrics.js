@@ -1,18 +1,19 @@
 import paso from "./paso.js";
 import fs from "fs";
 import ObjectsToCsv from "objects-to-csv";
-import { getAddresses } from "./index.js";
-import { getDestFromAddr } from "../utils/index.js";
-import { getSourceCode } from "../utils/index.js";
+import {
+    getDestFromAddr,
+    getSourceCode,
+    getContracts,
+} from "../utils/index.js";
 import csv from "csvtojson";
-import axios from "axios";
 
 // TODO import from a conf file
-const fn_metric = "./src/csv/metrics.csv";
-const server = "http://localhost:8080/";
+const fn_metric = "./data/metrics.csv";
+const fn_metric_json = "./data/metrics.json";
 
-const getJsonMetricsFromSol = dest =>
-    new Promise(resolve =>
+const getJsonMetricsFromSol = (dest) =>
+    new Promise((resolve) =>
         fs.readFile(dest, "utf8", (err, data) => {
             try {
                 resolve(paso(getSourceCode(JSON.parse(data))));
@@ -22,34 +23,38 @@ const getJsonMetricsFromSol = dest =>
         })
     );
 
-const writeMetricsOfOneContract = contractAddress => {
+const writeMetricsSingleContract = (contractAddress) => {
     const dest = getDestFromAddr(contractAddress);
     fs.existsSync(dest) &&
-        getJsonMetricsFromSol(dest).then(data => {
+        getJsonMetricsFromSol(dest).then((data) => {
             data.contractAddress = contractAddress;
             const csv = new ObjectsToCsv([data]);
             csv.toDisk(fn_metric, { append: true, header: false });
         });
 };
 
-const readMetricsFromFn = () => {
-    return csv({ checkType: true }).fromFile(fn_metric);
-};
+const getAddress = (obj) => obj.contractAddress.toLowerCase();
 
-export function writeMetrics() {
-    getAddresses()
-        .then(function(response) {
-            response.data.forEach(e => {
-                writeMetricsOfOneContract(e.contractAddress.toLowerCase());
+export function writeMetrics2CSV() {
+    getContracts()
+        .then(function (response) {
+            response.forEach((json) => {
+                writeMetricsSingleContract(getAddress(json));
             });
         })
-        .catch(e => console.log(e));
+        .catch((e) => console.log(e))
+        .finally(() => console.log(`JSON data is saved into ${fn_metric}`));
 }
 
-export function postMetrics() {
-    readMetricsFromFn()
-        .then(result => {
-            axios.post(server, result).catch(e => console.log(e));
-        })
-        .catch(e => console.log("error from readMetricsFromFn", e));
+export function writeMetrics2JSON() {
+    csv({ checkType: true })
+        .fromFile(fn_metric)
+        .then((r) => {
+            fs.writeFile(fn_metric_json, JSON.stringify(r), (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log(`JSON data is saved into ${fn_metric}`);
+            });
+        });
 }
