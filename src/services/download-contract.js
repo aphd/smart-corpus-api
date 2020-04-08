@@ -2,22 +2,24 @@ import https from "https";
 import fs from "fs";
 import dotenv from "dotenv";
 import {
-    delayLoop,
     getUrlFromAddr,
     getDirFromAddr,
-    getDestFromAddr
+    getDestFromAddr,
+    getContracts,
 } from "../utils/index.js";
-import { getAddresses } from "./index.js";
 import axios from "axios";
 
 dotenv.config();
 
+const getAddress = (obj) => obj.contractAddress.toLowerCase();
+
+const downloadSingleContract = (obj, i) => {
+    const address = getAddress(obj);
+    doesFileExist(address) || setTimeout(() => download(address), i * 200);
+};
+
 export function downloadContracts() {
-    getAddresses().then(addresses =>
-        addresses.data.forEach(
-            delayLoop(e => download(e.contractAddress.toLowerCase()), 200)
-        )
-    );
+    getContracts().then((json, i) => json.forEach(downloadSingleContract));
 }
 
 export function getContractData(contractAddress) {
@@ -30,16 +32,20 @@ export function getContractData(contractAddress) {
     return axios.get(getUrlFromAddr(contractAddress));
 }
 
-const download = contractAddress => {
+const doesFileExist = (contractAddress) => {
+    const dest = getDestFromAddr(contractAddress);
+    return fs.existsSync(dest);
+};
+
+const download = (contractAddress) => {
     const url = getUrlFromAddr(contractAddress);
     const dir = getDirFromAddr(contractAddress);
     const dest = getDestFromAddr(contractAddress);
 
-    if (fs.existsSync(dest)) return 0;
     !fs.existsSync(dir) && fs.mkdirSync(dir);
     let file = fs.createWriteStream(dest);
 
-    https.get(url, function(response) {
+    https.get(url, function (response) {
         response.pipe(file);
         file.on("finish", () => console.log(url));
     });
