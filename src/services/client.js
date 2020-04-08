@@ -1,11 +1,8 @@
-import {
-    downloadContracts,
-    writeMetrics2CSV,
-    writeMetrics2JSON,
-} from "./index.js";
+import { writeMetrics2CSV, writeMetrics2JSON } from "./handle-metrics.js";
+import { downloadContracts } from "./handle-contracts.js";
 
-//downloadContracts();
-writeMetrics2CSV();
+downloadContracts();
+// writeMetrics2CSV();
 // writeMetrics2JSON();
 /* To get the distinct/unique values in metric files run this bash script
 

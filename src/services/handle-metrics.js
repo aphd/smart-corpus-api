@@ -1,11 +1,8 @@
 import paso from "./paso.js";
 import fs from "fs";
 import ObjectsToCsv from "objects-to-csv";
-import {
-    getDestFromAddr,
-    getSourceCode,
-    getContracts,
-} from "../utils/index.js";
+import * as c from "../contract/contract.js";
+
 import csv from "csvtojson";
 
 // TODO import from a conf file
@@ -24,7 +21,7 @@ const getJsonMetricsFromSol = (dest) =>
     );
 
 const writeMetricsSingleContract = (contractAddress) => {
-    const dest = getDestFromAddr(contractAddress);
+    const dest = c.getDestFromAddr(contractAddress);
     fs.existsSync(dest) &&
         getJsonMetricsFromSol(dest).then((data) => {
             data.contractAddress = contractAddress;
@@ -33,13 +30,11 @@ const writeMetricsSingleContract = (contractAddress) => {
         });
 };
 
-const getAddress = (obj) => obj.contractAddress.toLowerCase();
-
 export function writeMetrics2CSV() {
-    getContracts()
+    c.getContracts()
         .then(function (response) {
             response.forEach((json) => {
-                writeMetricsSingleContract(getAddress(json));
+                writeMetricsSingleContract(c.getAddress(json));
             });
         })
         .catch((e) => console.log(e))
