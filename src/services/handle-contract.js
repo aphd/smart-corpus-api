@@ -15,11 +15,7 @@ const getAddress = (obj) => obj.contractAddress.toLowerCase();
 const downloadSingleContract = (obj, i) => {
     const address = getAddress(obj);
     console.log(i, address);
-    doesFileExist(address) ||
-        setTimeout(() => {
-            console.log(i * 1000);
-            // download(address), i * 1000;
-        });
+    doesFileExist(address) || setTimeout(() => download(address), i * 200);
 };
 
 const doesFileExist = (contractAddress) => {
