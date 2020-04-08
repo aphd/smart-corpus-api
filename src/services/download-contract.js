@@ -7,12 +7,15 @@ import {
     getDestFromAddr,
     getContracts,
 } from "../utils/index.js";
-import axios from "axios";
 
 dotenv.config();
 
 // TODO put this in a class
 // rename setTimeout with throttle and fix it because now the index is incremented even if the contract exists
+
+export function downloadContracts() {
+    getContracts().then((json, i) => json.forEach(downloadSingleContract));
+}
 
 const getAddress = (obj) => obj.contractAddress.toLowerCase();
 
@@ -20,19 +23,6 @@ const downloadSingleContract = (obj, i) => {
     const address = getAddress(obj);
     doesFileExist(address) || setTimeout(() => download(address), i * 200);
 };
-
-export function downloadContracts() {
-    getContracts().then((json, i) => json.forEach(downloadSingleContract));
-}
-
-export function getContractData(contractAddress) {
-    const dest = getDestFromAddr(contractAddress);
-    if (fs.existsSync(dest)) {
-        return fs.promises.readFile(dest, "utf8");
-    }
-    console.log(getUrlFromAddr(contractAddress));
-    return axios.get(getUrlFromAddr(contractAddress));
-}
 
 const doesFileExist = (contractAddress) => {
     const dest = getDestFromAddr(contractAddress);
