@@ -13,13 +13,13 @@ export default function paso(code) {
         addresses: '"type":"ElementaryTypeName","name":"address"',
         contracts: '"kind":"contract"',
         libraries: '"kind":"library"',
-        interfaces: '"kind":"interface"'
+        interfaces: '"kind":"interface"',
     };
     let result = {
         version: get_version(ast_s),
         total_lines: ast_j.loc.end.line,
         comments: get_comments(code),
-        blanks: code.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm).length
+        blanks: code.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm).length,
     };
 
     Object.entries(metrics).forEach(([key, value]) => {
@@ -29,14 +29,14 @@ export default function paso(code) {
     return result;
 }
 
-const get_comments = code => {
+const get_comments = (code) => {
     const match = code.match(
         /(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g
     );
     return match ? match.length : 0;
 };
 
-const get_version = ast_s => {
+const get_version = (ast_s) => {
     let version = ast_s.match(
         /"name":"solidity","value":"\^(\d{1,}.\d{1,}.\d{1,})/
     );
