@@ -37,25 +37,18 @@ export function getContracts(columns_to_skip) {
     );
 }
 
-export function getAddress(obj) {
-    obj.contractAddress.toLowerCase();
-}
+export const getAddress = (obj) => obj.contractAddress.toLowerCase();
 
-export function getUrlFromAddr(contractAddress) {
-    return `${source}${contractAddress}&apikey=${process.env.API_KEY}`;
-}
+export const getUrlFromAddr = (contractAddress) =>
+    `${source}${contractAddress}&apikey=${process.env.API_KEY}`;
 
-export function getFnFromAddr(contractAddress) {
-    return `${contractAddress}.json`;
-}
+export const getFnFromAddr = (contractAddress) => `${contractAddress}.json`;
 
-export function getDirFromAddr(contractAddress) {
-    return `${contractDir}/${contractAddress.substring(0, 4)}/`;
-}
+export const getDirFromAddr = (address) =>
+    `${contractDir}/${address.substring(0, 4)}/`;
 
-export function getDestFromAddr(contractAddress) {
-    return getDirFromAddr(contractAddress) + getFnFromAddr(contractAddress);
-}
+export const getDestFromAddr = (contractAddress) =>
+    getDirFromAddr(contractAddress) + getFnFromAddr(contractAddress);
 
 export function getSourceCode(data) {
     const sourceCode = data.result[0].SourceCode;
