@@ -41,15 +41,13 @@ node --experimental-modules src/services/client.mjs
 To compress the smart contracts' data
 
 ```bash
-cd src/
-7z a -t7z json.7z json
+yarn compress
 ```
 
 To extract the smart contracts' data
 
 ```bash
-cd data
-7za  x json.7z
+yarn extract
 ```
 
 ### References
