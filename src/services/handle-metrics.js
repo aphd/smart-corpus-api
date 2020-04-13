@@ -19,7 +19,8 @@ const getJsonMetricsFromSol = (dest) =>
         })
     );
 
-const writeMetricsSingleContract = (contractAddress) => {
+const writeMetricsSingleContract = (contract) => {
+    const contractAddress = c.getAddress(contract);
     const dest = c.getDestFromAddr(contractAddress);
     fs.existsSync(dest) &&
         getJsonMetricsFromSol(dest).then(async (data) => {
@@ -29,28 +30,21 @@ const writeMetricsSingleContract = (contractAddress) => {
         });
 };
 
-const writeMetricsForAllContracts = (contracts) => {
-    contracts.forEach((contract) => {
-        writeMetricsSingleContract(c.getAddress(contract));
-    });
-    console.log(`writeMetricsAllContracts ${fn_metric}`);
-};
+const writeMetricsForAllContracts = (contracts) =>
+    contracts.forEach(writeMetricsSingleContract);
 
 const writeMetrics2CSV = () =>
     new Promise((resolve, reject) => {
-        c.getContracts()
-            .then(writeMetricsForAllContracts)
-            .then(writeMetrics2JSON)
-            .then(() => resolve("writeMetrics2CSV ended"))
-            .catch((e) => reject(new Error(e)));
+        c.getContracts().then(writeMetricsForAllContracts);
     });
 
 const writeMetrics2JSON = () =>
     csv({ checkType: true })
         .fromFile(fn_metric)
-        .then((r) => fs.writeFileSync(fn_metric_json, JSON.stringify(r)))
-        .then(() => console.log(`writeMetrics2JSON ${fn_metric_json}`));
+        .then((r) => fs.writeFileSync(fn_metric_json, JSON.stringify(r)));
 
-writeMetrics2CSV()
-    .then((res) => console.log(res))
-    .catch((e) => console.error(e));
+const writeMetrics = (type) => {
+    type === "csv" ? writeMetrics2CSV() : writeMetrics2JSON();
+};
+
+writeMetrics(process.argv.slice(2)[0]);
