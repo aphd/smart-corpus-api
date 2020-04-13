@@ -36,19 +36,21 @@ const writeMetricsForAllContracts = (contracts) => {
     console.log(`writeMetricsAllContracts ${fn_metric}`);
 };
 
-export function writeMetrics2CSV() {
-    return new Promise((resolve, reject) => {
+const writeMetrics2CSV = () =>
+    new Promise((resolve, reject) => {
         c.getContracts()
             .then(writeMetricsForAllContracts)
             .then(writeMetrics2JSON)
             .then(() => resolve("writeMetrics2CSV ended"))
             .catch((e) => reject(new Error(e)));
     });
-}
 
-export function writeMetrics2JSON() {
+const writeMetrics2JSON = () =>
     csv({ checkType: true })
         .fromFile(fn_metric)
         .then((r) => fs.writeFileSync(fn_metric_json, JSON.stringify(r)))
         .then(() => console.log(`writeMetrics2JSON ${fn_metric_json}`));
-}
+
+writeMetrics2CSV()
+    .then((res) => console.log(res))
+    .catch((e) => console.error(e));

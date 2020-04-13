@@ -2,7 +2,7 @@ import https from "https";
 import fs from "fs";
 import * as c from "../contract/contract.js";
 
-export const downloadContracts = () =>
+const downloadContracts = () =>
     c.getContracts().then((json, i) => json.forEach(downloadSingleContract));
 
 const downloadSingleContract = (obj, i) => {
@@ -28,3 +28,5 @@ const download = (address) => {
         file.on("finish", () => console.log(url));
     });
 };
+
+downloadContracts();

@@ -9,6 +9,7 @@ const source =
 const verified_address_fn = "/tmp/contracts.csv";
 const contractDir = "./data/contracts/";
 
+// TODO refactoring this method
 export function getContracts(columns_to_skip) {
     const results = [];
     return new Promise((resolve) =>
