@@ -1,3 +1,4 @@
+#TODO making a function in bash which implements the logic of compressing a genric file
 echo "compressing contracts..."
 cd data
 mv contracts.7z /tmp/

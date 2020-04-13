@@ -11,7 +11,8 @@
         "clean": "rimraf dist",
         "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
         "compress": "bash src/scripts/compress.sh",
-        "extract": "bash src/scripts/extract.sh"
+        "extract": "bash src/scripts/extract.sh",
+        "update": "bash src/scripts/update-metrics.sh"
     },
     "author": "Bill Sourour (Dev Mastery)",
     "license": "ISC",
@@ -26,7 +27,6 @@
         "mongodb": "^3.5.2",
         "mongoose": "^5.8.10",
         "objects-to-csv": "^1.3.6",
-        "shelljs": "^0.8.3",
         "solidity-parser-diligence": "^0.4.18"
     },
     "devDependencies": {
