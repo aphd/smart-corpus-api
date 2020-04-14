@@ -43,8 +43,7 @@ const writeMetrics2JSON = () =>
         .fromFile(fn_metric)
         .then((r) => fs.writeFileSync(fn_metric_json, JSON.stringify(r)));
 
-const writeMetrics = (type) => {
+const writeMetrics = (type) =>
     type === "csv" ? writeMetrics2CSV() : writeMetrics2JSON();
-};
 
 writeMetrics(process.argv.slice(2)[0]);
