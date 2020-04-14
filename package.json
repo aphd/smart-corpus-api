@@ -9,7 +9,13 @@
             "@babel/preset-env"
         ],
         "plugins": [
-            "rewire"
+            "rewire",
+            [
+                "@babel/plugin-transform-runtime",
+                {
+                    "regenerator": true
+                }
+            ]
         ]
     },
     "scripts": {
@@ -25,8 +31,10 @@
     "author": "Bill Sourour (Dev Mastery)",
     "license": "ISC",
     "dependencies": {
+        "@babel/runtime": "^7.9.2",
         "axios": "^0.19.2",
         "babel-plugin-rewire": "^1.2.0",
+        "babel-preset-env": "^1.7.0",
         "body-parser": "^1.18.3",
         "cors": "^2.8.5",
         "csv-parser": "^2.3.2",
@@ -43,6 +51,7 @@
     "devDependencies": {
         "@babel/cli": "^7.2.3",
         "@babel/core": "^7.9.0",
+        "@babel/plugin-transform-runtime": "^7.9.0",
         "@babel/preset-env": "^7.9.5",
         "babel-core": "^6.26.3",
         "babel-jest": "^25.3.0",
