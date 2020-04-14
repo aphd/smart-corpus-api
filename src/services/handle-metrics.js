@@ -46,4 +46,6 @@ const writeMetrics2JSON = () =>
 const writeMetrics = (type) =>
     type === "csv" ? writeMetrics2CSV() : writeMetrics2JSON();
 
+export default writeMetrics;
+
 writeMetrics(process.argv.slice(2)[0]);
