@@ -19,8 +19,7 @@ const getJsonMetricsFromSol = (dest) =>
         })
     );
 
-const writeMetricsSingleContract = (contract) => {
-    const contractAddress = c.getAddress(contract);
+const writeMetricsSingleContract = (contractAddress) => {
     const dest = c.getDestFromAddr(contractAddress);
     fs.existsSync(dest) &&
         getJsonMetricsFromSol(dest).then(async (data) => {
@@ -30,12 +29,10 @@ const writeMetricsSingleContract = (contract) => {
         });
 };
 
-const writeMetricsForAllContracts = (contracts) =>
-    contracts.forEach(writeMetricsSingleContract);
-
 const writeMetrics2CSV = () =>
     new Promise((resolve, reject) => {
-        c.getContracts().then(writeMetricsForAllContracts);
+        const addresses = c.getContracts();
+        addresses.forEach(writeMetricsSingleContract);
     });
 
 const writeMetrics2JSON = () =>

@@ -1,8 +1,12 @@
 import parse from "solidity-parser-diligence/dist/index.js";
 
 export default function paso(code) {
-    const ast_j = parse.parse(code, { loc: true });
-    const ast_s = JSON.stringify(ast_j);
+    let ast_j, ast_s, result;
+
+    result = {
+        comments: get_comments(code),
+        blanks: code.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm).length,
+    };
     const metrics = {
         mapping: '"type":"Mapping"',
         functions: '"type":"FunctionDefinition"',
@@ -15,15 +19,22 @@ export default function paso(code) {
         libraries: '"kind":"library"',
         interfaces: '"kind":"interface"',
     };
-    let result = {
-        version: get_version(ast_s),
-        total_lines: ast_j.loc.end.line,
-        comments: get_comments(code),
-        blanks: code.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm).length,
-    };
+
+    try {
+        ast_j = parse.parse(code, { loc: true });
+        ast_s = JSON.stringify(ast_j);
+        result["version"] = get_version(ast_s);
+        result["total_lines"] = ast_j.loc.end.line;
+    } catch (error) {
+        console.log("----error----", error);
+        result["total_lines"] = "n/a";
+        result["version"] = "n/a";
+    }
 
     Object.entries(metrics).forEach(([key, value]) => {
-        result[key] = (ast_s.match(new RegExp(value, "g")) || []).length;
+        result[key] = ast_s
+            ? (ast_s.match(new RegExp(value, "g")) || []).length
+            : "n/a";
     });
 
     return result;

@@ -19,8 +19,6 @@ export function getContracts() {
     return addresses.filter((e) => /^0x\w{40}$/.test(e));
 }
 
-export const getAddress = (obj) => obj.contractAddress.toLowerCase();
-
 export const getUrlFromAddr = (contractAddress) =>
     `${source}${contractAddress}&apikey=${process.env.API_KEY}`;
 
