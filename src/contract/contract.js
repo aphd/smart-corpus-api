@@ -1,44 +1,23 @@
-import csv from "csv-parser";
+import yaml from "js-yaml";
 import fs from "fs";
 import dotenv from "dotenv";
 
 dotenv.config();
 
+const config = yaml.load(fs.readFileSync("./src/config.yml", "utf8"));
+const { contracts_address } = config;
+
 const source =
     "https://api.etherscan.io/api?module=contract&action=getsourcecode&address=";
-const verified_address_fn = "/tmp/contracts.csv";
 const contractDir = "./data/contracts/";
 
-// TODO refactoring this method
-export function getContracts(columns_to_skip) {
-    const results = [];
-    return new Promise((resolve) =>
-        fs
-            .createReadStream(verified_address_fn)
-            .pipe(
-                csv({
-                    mapHeaders: ({ header, index }) => {
-                        if (
-                            columns_to_skip &&
-                            columns_to_skip.includes(header)
-                        ) {
-                            return null;
-                        }
-                        return header.charAt(0).toLowerCase() + header.slice(1);
-                    },
-                    separator: ",",
-                })
-            )
-            .on("data", (data) => {
-                results.push(data);
-            })
-            .on("end", () => {
-                resolve(results);
-            })
-    );
+export function getContracts() {
+    if (!fs.existsSync(contracts_address)) throw "ERROR: getContracts";
+    const data = fs.readFileSync(contracts_address);
+    const lines = data.toString().split("\n");
+    const addresses = lines.map((e) => e.split(",")[1]?.slice(1, -1));
+    return addresses.filter((e) => /^0x\w{40}$/.test(e));
 }
-
-export const getAddress = (obj) => obj.contractAddress.toLowerCase();
 
 export const getUrlFromAddr = (contractAddress) =>
     `${source}${contractAddress}&apikey=${process.env.API_KEY}`;

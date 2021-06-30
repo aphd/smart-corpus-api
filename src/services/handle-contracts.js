@@ -2,11 +2,13 @@ import https from "https";
 import fs from "fs";
 import * as c from "../contract/contract.js";
 
-const downloadContracts = () =>
-    c.getContracts().then((json, i) => json.forEach(downloadSingleContract));
+const downloadContracts = () => {
+    const addresses = c.getContracts();
+    addresses.forEach(downloadSmartContract);
+};
 
-const downloadSingleContract = (obj, i) => {
-    const address = c.getAddress(obj);
+const downloadSmartContract = (address, i) => {
+    console.log({ address, i });
     doesFileExist(address) || setTimeout(() => download(address), i * 200);
 };
 
@@ -23,7 +25,7 @@ const download = (address) => {
     !fs.existsSync(dir) && fs.mkdirSync(dir);
     let file = fs.createWriteStream(dest);
 
-    https.get(url, function (response) {
+    https.get(url, function(response) {
         response.pipe(file);
         file.on("finish", () => console.log(url));
     });
