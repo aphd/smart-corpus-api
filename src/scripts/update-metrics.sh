@@ -1,8 +1,8 @@
-echo "Downloading contracts..."
-node src/services/handle-contracts.js
+# echo "Downloading contracts..."
+# node src/services/handle-contracts.js
 
-echo "Writing metrics to csv..."
-node src/services/handle-metrics.js csv
+# echo "Writing metrics to csv..."
+# node src/services/handle-metrics.js csv
 
 echo "Removing dupicates metrics from /data/metrics.csv..."
 FN=./data/metrics.csv
