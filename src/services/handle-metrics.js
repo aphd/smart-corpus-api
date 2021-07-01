@@ -21,19 +21,19 @@ const getJsonMetricsFromSol = (dest) =>
 
 const writeMetricsSingleContract = (contractAddress) => {
     const dest = c.getDestFromAddr(contractAddress);
-    fs.existsSync(dest) &&
-        getJsonMetricsFromSol(dest).then(async (data) => {
-            data.contractAddress = contractAddress;
-            const csv = new ObjectsToCsv([data]);
-            await csv.toDisk(fn_metric, { append: true, header: false });
-        });
+    const doesExist = fs.existsSync(dest);
+    if (!doesExist) return null;
+    getJsonMetricsFromSol(dest).then(async (data) => {
+        data.contractAddress = contractAddress;
+        const csv = new ObjectsToCsv([data]);
+        await csv.toDisk(fn_metric, { append: true, header: false });
+    });
 };
 
-const writeMetrics2CSV = () =>
-    new Promise((resolve, reject) => {
-        const addresses = c.getContracts();
-        addresses.forEach(writeMetricsSingleContract);
-    });
+const writeMetrics2CSV = async () => {
+    const addresses = await c.getAddressesFromLocalStorage();
+    addresses.forEach(writeMetricsSingleContract);
+};
 
 const writeMetrics2JSON = () =>
     csv({ checkType: true })
