@@ -1,6 +1,7 @@
 import yaml from "js-yaml";
 import fs from "fs";
 import dotenv from "dotenv";
+import globby from "globby";
 
 dotenv.config();
 
@@ -43,4 +44,9 @@ export function getSourceCode(data) {
     } catch (e) {
         return sourceCode;
     }
+}
+
+export async function getAddressesFromLocalStorage() {
+    const files = await globby(contractDir);
+    return files.map((e) => e.match(/(0x\w{40}).json$/)[1]);
 }

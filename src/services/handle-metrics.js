@@ -30,8 +30,8 @@ const writeMetricsSingleContract = (contractAddress) => {
     });
 };
 
-const writeMetrics2CSV = () => {
-    const addresses = c.getContracts();
+const writeMetrics2CSV = async () => {
+    const addresses = await c.getAddressesFromLocalStorage();
     addresses.forEach(writeMetricsSingleContract);
 };
 
