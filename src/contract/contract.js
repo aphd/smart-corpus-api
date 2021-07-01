@@ -1,6 +1,7 @@
 import yaml from "js-yaml";
 import fs from "fs";
 import dotenv from "dotenv";
+import globby from "globby";
 
 dotenv.config();
 
@@ -12,7 +13,8 @@ const source =
 const contractDir = "./data/contracts/";
 
 export function getContracts() {
-    if (!fs.existsSync(contracts_address)) throw "ERROR: getContracts";
+    if (!fs.existsSync(contracts_address))
+        throw `The file ${contracts_address} does not exist.`;
     const data = fs.readFileSync(contracts_address);
     const lines = data.toString().split("\n");
     const addresses = lines.map((e) => e.split(",")[1]?.slice(1, -1));
@@ -42,4 +44,9 @@ export function getSourceCode(data) {
     } catch (e) {
         return sourceCode;
     }
+}
+
+export async function getAddressesFromLocalStorage() {
+    const files = await globby(contractDir);
+    return files.map((e) => e.match(/(0x\w{40}).json$/)[1]);
 }
