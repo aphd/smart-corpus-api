@@ -15,7 +15,6 @@ src/csv
 
 # output data
 data/contracts/*
-data/metrics.csv
 
 ### Node ###
 # Logs
