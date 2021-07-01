@@ -12,7 +12,8 @@ const source =
 const contractDir = "./data/contracts/";
 
 export function getContracts() {
-    if (!fs.existsSync(contracts_address)) throw "ERROR: getContracts";
+    if (!fs.existsSync(contracts_address))
+        throw `The file ${contracts_address} does not exist.`;
     const data = fs.readFileSync(contracts_address);
     const lines = data.toString().split("\n");
     const addresses = lines.map((e) => e.split(",")[1]?.slice(1, -1));

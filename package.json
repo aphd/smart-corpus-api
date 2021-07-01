@@ -4,20 +4,6 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
-    "babel": {
-        "presets": [
-            "@babel/preset-env"
-        ],
-        "plugins": [
-            "rewire",
-            [
-                "@babel/plugin-transform-runtime",
-                {
-                    "regenerator": true
-                }
-            ]
-        ]
-    },
     "scripts": {
         "test": "jest",
         "prestart": "npm run -s build",
@@ -60,6 +46,20 @@
         "jest": "^25.3.0",
         "regenerator-runtime": "^0.13.1",
         "rimraf": "^2.6.3"
+    },
+    "babel": {
+        "presets": [
+            "@babel/preset-env"
+        ],
+        "plugins": [
+            "rewire",
+            [
+                "@babel/plugin-transform-runtime",
+                {
+                    "regenerator": true
+                }
+            ]
+        ]
     },
     "jest": {
         "verbose": true,
