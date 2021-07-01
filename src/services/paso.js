@@ -1,4 +1,4 @@
-import parse from "solidity-parser-diligence/dist/index.js";
+import parser from "@solidity-parser/parser";
 
 export default function paso(code) {
     let ast_j, ast_s, result;
@@ -21,7 +21,7 @@ export default function paso(code) {
     };
 
     try {
-        ast_j = parse.parse(code, { loc: true });
+        ast_j = parser.parse(code, { loc: true });
         ast_s = JSON.stringify(ast_j);
         result["version"] = get_version(ast_s);
         result["total_lines"] = ast_j.loc.end.line;
@@ -29,8 +29,8 @@ export default function paso(code) {
         console.log(
             "----error in PASO parser: some value will be set to n/a---- "
         );
-        result["total_lines"] = "n/a";
         result["version"] = "n/a";
+        result["total_lines"] = "n/a";
     }
 
     Object.entries(metrics).forEach(([key, value]) => {
@@ -53,5 +53,5 @@ const get_version = (ast_s) => {
     let version = ast_s.match(
         /"name":"solidity","value":"\^(\d{1,}.\d{1,}.\d{1,})/
     );
-    return version ? version[1] : "Not defined";
+    return version ? version[1] : "n/a";
 };
