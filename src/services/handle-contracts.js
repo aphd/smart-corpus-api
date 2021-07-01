@@ -3,13 +3,18 @@ import fs from "fs";
 import * as c from "../contract/contract.js";
 
 const downloadContracts = () => {
-    const addresses = c.getContracts();
-    addresses.forEach(downloadSmartContract);
+    try {
+        const addresses = c.getContracts();
+        addresses.forEach(downloadSmartContract);
+    } catch (e) {
+        console.error("--- Error in downloading the contract ---", e);
+    }
 };
 
 const downloadSmartContract = (address, i) => {
-    console.log({ address, i });
-    doesFileExist(address) || setTimeout(() => download(address), i * 200);
+    const doesExist = doesFileExist(address);
+    console.log({ address, i, doesExist });
+    doesExist || setTimeout(() => download(address), i * 200);
 };
 
 const doesFileExist = (address) => {

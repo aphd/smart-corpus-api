@@ -26,7 +26,9 @@ export default function paso(code) {
         result["version"] = get_version(ast_s);
         result["total_lines"] = ast_j.loc.end.line;
     } catch (error) {
-        console.log("----error----", error);
+        console.log(
+            "----error in PASO parser: some value will be set to n/a---- "
+        );
         result["total_lines"] = "n/a";
         result["version"] = "n/a";
     }
