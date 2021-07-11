@@ -12,27 +12,27 @@ const getJsonMetricsFromSol = (dest) =>
     new Promise((resolve) =>
         fs.readFile(dest, "utf8", (err, data) => {
             try {
-                resolve(paso(c.getSourceCode(JSON.parse(data))));
+                resolve(paso(data));
             } catch (e) {
                 console.log("Paso error in: ", dest);
             }
         })
     );
 
-const writeMetricsSingleContract = (contractAddress) => {
-    const dest = c.getDestFromAddr(contractAddress);
+const writeMetricsSingleContract = (dest) => {
     const doesExist = fs.existsSync(dest);
     if (!doesExist) return null;
     getJsonMetricsFromSol(dest).then(async (data) => {
-        data.contractAddress = contractAddress;
+        const address = dest.match(/(0x\w{40}).sol$/)?.[1];
+        data.contractAddress = address;
         const csv = new ObjectsToCsv([data]);
         await csv.toDisk(fn_metric, { append: true, header: false });
     });
 };
 
 const writeMetrics2CSV = async () => {
-    const addresses = await c.getAddressesFromLocalStorage();
-    addresses.forEach(writeMetricsSingleContract);
+    const sols = await c.getSolFromLocalStorage();
+    sols.forEach(writeMetricsSingleContract);
 };
 
 const writeMetrics2JSON = () =>

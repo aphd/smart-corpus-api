@@ -46,7 +46,7 @@ export function getSourceCode(data) {
     }
 }
 
-export async function getAddressesFromLocalStorage() {
+export async function getSolFromLocalStorage() {
     const files = await globby(contractDir);
-    return files.map((e) => e.match(/(0x\w{40}).json$/)[1]);
+    return files.filter((e) => /.sol$/.test(e));
 }

@@ -29,7 +29,7 @@ const download = (address) => {
 
     https.get(url, function(response) {
         const isGoodResponse = response.headers["content-length"] > 150;
-        if (!isGoodResponse) return null;
+        if (!isGoodResponse) return null; // it avoids writing an empty file when the token has exceeded the request limit
         let file = fs.createWriteStream(dest);
         response.pipe(file);
         file.on("finish", () => {
