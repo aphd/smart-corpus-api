@@ -32,20 +32,6 @@ export const getDirFromAddr = (address) =>
 export const getDestFromAddr = (contractAddress) =>
     getDirFromAddr(contractAddress) + getFnFromAddr(contractAddress);
 
-export function getSourceCode(data) {
-    const sourceCode = data.result[0].SourceCode;
-    try {
-        const nestedSourceCode = JSON.parse(sourceCode);
-        return nestedSourceCode[
-            Object.keys(nestedSourceCode)[
-                Object.keys(nestedSourceCode).length - 1
-            ]
-        ].content;
-    } catch (e) {
-        return sourceCode;
-    }
-}
-
 export async function getSolFromLocalStorage() {
     const files = await globby(contractDir);
     return files.filter((e) => /.sol$/.test(e));
