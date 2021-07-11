@@ -12,6 +12,7 @@
         "clean:data": "rm -rf data/contracts/*",
         "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
         "compress": "bash src/scripts/compress.sh",
+        "copy:smart-contracts": "bash src/scripts/copy-smart-contracts.sh",
         "extract": "bash src/scripts/extract.sh",
         "update": "bash src/scripts/update-metrics.sh"
     },
