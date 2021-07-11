@@ -32,7 +32,15 @@ const download = (address) => {
         if (!isGoodResponse) return null;
         let file = fs.createWriteStream(dest);
         response.pipe(file);
-        file.on("finish", () => console.log(url));
+        file.on("finish", () => {
+            const res = JSON.parse(fs.readFileSync(dest, "utf8")).result[0];
+            const abiDest = dest.replace(/.json$/, ".abi");
+            const solDest = dest.replace(/.json$/, ".sol");
+
+            fs.writeFileSync(abiDest, res.ABI);
+            fs.writeFileSync(solDest, res.SourceCode);
+            console.log(url);
+        });
     });
 };
 
