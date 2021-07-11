@@ -1,7 +1,6 @@
 for path in "/tmp/smartcontracts/"*
 do
     file_name="${path##*/}"
-    echo ${file_name:0:4}
-    echo ${path}
-    cp  ${path} data/contracts/${file_name:0:4}/
+    file_name_lower=$(echo "${file_name}" | awk '{print tolower($0)}')
+    cp ${path} data/contracts/${file_name_lower:0:4}/${file_name_lower}
 done
