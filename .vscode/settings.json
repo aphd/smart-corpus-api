@@ -6,6 +6,7 @@
         "**/.DS_Store": true,
         "**/.env": true,
         "src/json": true,
-        "src/csv": true
+        "src/csv": true,
+        "data": true
     }
 }
