@@ -4,7 +4,7 @@ node src/services/handle-contracts.js
 echo "Writing metrics to csv..."
 node src/services/handle-metrics.js csv
      
-echo "Removing dupicates metrics from /data/metrics.csv..."
+echo "Removing duplicated metrics from /data/metrics.csv..."
 FN=./data/metrics.csv
 FNU="$FN.u"
 (head -n 1 $FN && tail -n +2 $FN | sort) | uniq > $FNU
