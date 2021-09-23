@@ -4,18 +4,10 @@ import handleSmacsRequest from "./smacs/index.js";
 import adaptRequest from "./helpers/adapt-request.js";
 import cors from "cors";
 import { getContractData } from "./services/index.js";
-import { getSourceCode } from "./utils/index.js";
 
 const app = express();
 app.use(express.json({ limit: "150mb" }));
 
-app.get("/getSourceCode/:address", function(req, res) {
-    getContractData(req.params.address)
-        .then(r => {
-            res.json({ sourceCode: getSourceCode(r.data || JSON.parse(r)) });
-        })
-        .catch(e => res.json({ error: e }));
-});
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -30,7 +22,7 @@ function smacsController(req, res, next) {
                 .status(statusCode)
                 .send(data);
         })
-        .catch(err => {
+        .catch((err) => {
             console.error(next("handleSmacsRequest error: ", err.stack));
         });
 }

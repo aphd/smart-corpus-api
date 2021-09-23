@@ -29,10 +29,18 @@ const download = (address) => {
 
     https.get(url, function(response) {
         const isGoodResponse = response.headers["content-length"] > 150;
-        if (!isGoodResponse) return null;
+        if (!isGoodResponse) return null; // it avoids writing an empty file when the token has exceeded the request limit
         let file = fs.createWriteStream(dest);
         response.pipe(file);
-        file.on("finish", () => console.log(url));
+        file.on("finish", () => {
+            const res = JSON.parse(fs.readFileSync(dest, "utf8")).result[0];
+            const abiDest = dest.replace(/.json$/, ".abi");
+            const solDest = dest.replace(/.json$/, ".sol");
+
+            fs.writeFileSync(abiDest, res.ABI);
+            fs.writeFileSync(solDest, res.SourceCode);
+            console.log(url);
+        });
     });
 };
 
