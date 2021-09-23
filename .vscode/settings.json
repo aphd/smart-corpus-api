@@ -8,5 +8,10 @@
         "src/json": true,
         "src/csv": true,
         "data": true
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#322E0F",
+        "titleBar.activeBackground": "#474015",
+        "titleBar.activeForeground": "#FCFBF3"
     }
 }
