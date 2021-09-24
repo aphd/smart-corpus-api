@@ -8,7 +8,7 @@ const downloadContracts = () => {
         const addressesNonExisting = addresses.filter((e) => !doesFileExist(e));
         addressesNonExisting.forEach(downloadSmartContract);
     } catch (e) {
-        console.error("--- Error in downloading the contract ---", e);
+        console.error('--- Error in downloading the contract ---', e);
     }
 };
 
@@ -27,15 +27,15 @@ const download = (address) => {
 
     !fs.existsSync(dir) && fs.mkdirSync(dir);
 
-    https.get(url, function(response) {
-        const isGoodResponse = response.headers["content-length"] > 150;
+    https.get(url, function (response) {
+        const isGoodResponse = response.headers['content-length'] > 150;
         if (!isGoodResponse) return null; // it avoids writing an empty file when the token has exceeded the request limit
         let file = fs.createWriteStream(dest);
         response.pipe(file);
-        file.on("finish", () => {
-            const res = JSON.parse(fs.readFileSync(dest, "utf8")).result[0];
-            const abiDest = dest.replace(/.json$/, ".abi");
-            const solDest = dest.replace(/.json$/, ".sol");
+        file.on('finish', () => {
+            const res = JSON.parse(fs.readFileSync(dest, 'utf8')).result[0];
+            const abiDest = dest.replace(/.json$/, '.abi');
+            const solDest = dest.replace(/.json$/, '.sol');
 
             fs.writeFileSync(abiDest, res.ABI);
             fs.writeFileSync(solDest, res.SourceCode);
