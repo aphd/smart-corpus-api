@@ -1,4 +1,8 @@
 {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 8,
+    "prettier.tabWidth": 4,
     "files.exclude": {
         "**/.cache": true,
         "**/node_modules": true,
