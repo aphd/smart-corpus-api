@@ -1,5 +1,6 @@
 import paso from "./paso.js";
 import fs from "fs";
+import { promises as pfs } from 'fs';
 import csv from "csvtojson";
 import ObjectsToCsv from "objects-to-csv";
 import * as c from "../contract/contract.js";
@@ -8,31 +9,29 @@ import * as c from "../contract/contract.js";
 const fn_metric = "./data/metrics.csv";
 const fn_metric_json = "./data/metrics.json";
 
-const getJsonMetricsFromSol = (dest) =>
-    new Promise((resolve) =>
-        fs.readFile(dest, "utf8", (err, data) => {
-            try {
-                resolve(paso(data));
-            } catch (e) {
-                console.log("Paso error in: ", dest);
-            }
-        })
-    );
+const getJsonMetricsFromSol = async (dest) => {
+    const data = await pfs.readFile(dest, "utf8");
+    try {
+        return (paso(data));
+    } catch (e) {
+        console.log("Paso error in: ", dest);
+    }
+ }
 
-const writeMetricsSingleContract = (dest) => {
+const writeMetricsSingleContract = async (dest) => {
     const doesExist = fs.existsSync(dest);
     if (!doesExist) return null;
-    getJsonMetricsFromSol(dest).then(async (data) => {
-        const address = dest.match(/(0x\w{40}).sol$/)?.[1];
-        data.contractAddress = address;
-        const csv = new ObjectsToCsv([data]);
-        await csv.toDisk(fn_metric, { append: true, header: false });
-    });
+    const data = await getJsonMetricsFromSol(dest)
+    if(!data) return null;
+    data['contractAddress'] = dest.match(/(0x\w{40}).sol$/)?.[1];;
+    const csv = new ObjectsToCsv([data]);
+    await csv.toDisk(fn_metric, { append: true, header: false });
 };
 
 const writeMetrics2CSV = async () => {
     const sols = await c.getSolFromLocalStorage();
-    sols.forEach(writeMetricsSingleContract);
+    console.log(sols.length)
+    await sols.slice(0, 10_000).forEach(async (sol) => await writeMetricsSingleContract(sol));
 };
 
 const writeMetrics2JSON = () =>
