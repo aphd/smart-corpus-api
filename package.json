@@ -14,7 +14,8 @@
         "compress": "bash src/scripts/compress.sh",
         "copy:smart-contracts": "bash src/scripts/copy-smart-contracts.sh",
         "extract": "bash src/scripts/extract.sh",
-        "update": "bash src/scripts/update-metrics.sh"
+        "update": "bash src/scripts/update-metrics.sh",
+        "write-metrics-to-csv": "node src/services/handle-metrics.js csv"
     },
     "author": "Bill Sourour (Dev Mastery)",
     "license": "ISC",
