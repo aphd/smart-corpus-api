@@ -51,7 +51,7 @@ const get_comments = (code) => {
 
 const get_version = (ast_s) => {
     let version = ast_s.match(
-        /"name":"solidity","value":"\^(\d{1,}.\d{1,}.\d{1,})/
+        /"name":"solidity","value":".*(\d{1,}.\d{1,}.\d{1,})"/
     );
     return version ? version[1] : "n/a";
 };
