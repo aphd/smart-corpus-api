@@ -8,36 +8,59 @@ export default function paso(code) {
         blanks: code.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm).length,
     };
     const metrics = {
-        mapping: '"type":"Mapping"',
-        functions: '"type":"FunctionDefinition"',
-        payable: '"stateMutability":"payable"',
-        events: '"type":"EventDefinition"',
-        modifiers: '"type":"ModifierDefinition"',
-        contracts_definition: '"type":"ContractDefinition"',
         addresses: '"type":"ElementaryTypeName","name":"address"',
+        assemblyStatement: '"type":"assemblyStatement"',
+        block: '"type":"block"',
+        contracts_definition: '"type":"ContractDefinition"',
         contracts: '"kind":"contract"',
-        libraries: '"kind":"library"',
+        doWhileStatement: '"type":"doWhileStatement"',
+        emitStatement: '"type":"emitStatement"',
+        events: '"type":"EventDefinition"',
+        forStatement: '"type":"IfStatement"',
+        functions: '"type":"FunctionDefinition"',
+        ifStatement: '"type":"IfStatement"',
+        inlineAssemblyStatement: '"type":"inlineAssemblyStatement"',
         interfaces: '"kind":"interface"',
+        libraries: '"kind":"library"',
+        mapping: '"type":"Mapping"',
+        modifiers: '"type":"ModifierDefinition"',
+        payable: '"stateMutability":"payable"',
+        public: '"stateMutability":"public"',
+        pure: '"stateMutability":"pure"',
+        returnStatement: '"type":"returnStatement"',
+        revertStatement: '"type":"revertStatement"',
+        simpleStatement: '"type":"simpleStatement"',
+        throwStatement: '"type":"throwStatement"',
+        tryStatement: '"type":"tryStatement"',
+        view: '"stateMutability":"view"',
+        isVirtual: '"isVirtual":true',
+        isFallback: '"isFallback":true',
+        whileStatement: '"type":"whileStatement"',
     };
 
     try {
         ast_j = parser.parse(code, { loc: true });
         ast_s = JSON.stringify(ast_j);
-        result["version"] = get_version(ast_s);
-        result["total_lines"] = ast_j.loc.end.line;
+        console.log('ast_s:', ast_s);
+        result['version'] = get_version(ast_s);
+        result['total_lines'] = ast_j.loc.end.line;
     } catch (error) {
         console.log(
-            "----error in PASO parser: some value will be set to n/a---- "
+            '----error in PASO parser: some value will be set to n/a---- '
         );
-        result["version"] = "n/a";
-        result["total_lines"] = "n/a";
+        result['version'] = 'n/a';
+        result['total_lines'] = 'n/a';
     }
 
     Object.entries(metrics).forEach(([key, value]) => {
         result[key] = ast_s
-            ? (ast_s.match(new RegExp(value, "g")) || []).length
-            : "n/a";
+            ? (ast_s.match(new RegExp(value, 'gi')) || []).length
+            : 'n/a';
     });
+
+    // console.log('result: ... ', result);
+    // console.log('getMCC: ... ', getMCC(result));
+    result['mmc'] = getMCC(result);
 
     return result;
 }
@@ -53,5 +76,18 @@ const get_version = (ast_s) => {
     let version = ast_s.match(
         /"name":"solidity","value":".*(\d{1,}.\d{1,}.\d{1,})"/
     );
-    return version ? version[1] : "n/a";
+    return version ? version[1] : 'n/a';
+};
+
+const getMCC = (metrics) => {
+    console.log('metrics:', metrics);
+    const controlStructures = [
+        'functions',
+        'ifStatement',
+        'forStatement',
+        'whileStatement',
+        'doWhileStatement',
+        'tryStatement',
+    ];
+    return controlStructures.reduce((a, c) => a + metrics[c], 0);
 };
