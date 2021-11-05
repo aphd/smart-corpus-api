@@ -76,6 +76,11 @@ const get_version = (ast_s) => {
     let version = ast_s.match(
         /"name":"solidity","value":".*(\d{1,}.\d{1,}.\d{1,})"/
     );
+    if (/<.*\d{1,}.\d{1,}.\d{1,}/.test(version[0])) {
+        const nums = version[1].split('.');
+        nums[2] > 0 ? nums[2]-- : nums[1]--;
+        return nums.join('.');
+    }
     return version ? version[1] : 'n/a';
 };
 
