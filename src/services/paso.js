@@ -1,6 +1,6 @@
 import parser from "@solidity-parser/parser";
 
-export default function paso(code) {
+export default function paso(code, abi, bytecode, dest) {
     let ast_j, ast_s, result;
 
     result = {
@@ -41,12 +41,12 @@ export default function paso(code) {
     try {
         ast_j = parser.parse(code, { loc: true });
         ast_s = JSON.stringify(ast_j);
-        console.log('ast_s:', ast_s);
-        result['version'] = get_version(ast_s);
+        result['rawVersion'] = getRawVersion(ast_s);
+        result['version'] = getVersion(result['rawVersion']);
         result['total_lines'] = ast_j.loc.end.line;
     } catch (error) {
         console.log(
-            '----error in PASO parser: some value will be set to n/a---- '
+            `Error in PASO parser: some value will be n/a----, ${dest},\n${error}`
         );
         result['version'] = 'n/a';
         result['total_lines'] = 'n/a';
@@ -57,10 +57,11 @@ export default function paso(code) {
             ? (ast_s.match(new RegExp(value, 'gi')) || []).length
             : 'n/a';
     });
-
-    // console.log('result: ... ', result);
-    // console.log('getMCC: ... ', getMCC(result));
     result['mmc'] = getMCC(result);
+
+    result['abiLength'] = abi ? JSON.parse(abi)?.length : 'n/a';
+    result['abiStringLength'] = abi?.length || 'n/a';
+    result['bytecode'] = bytecode?.length > 0 ? bytecode?.length : 'n/a';
 
     return result;
 }
@@ -72,20 +73,25 @@ const get_comments = (code) => {
     return match ? match.length : 0;
 };
 
-const get_version = (ast_s) => {
-    let version = ast_s.match(
-        /"name":"solidity","value":".*(\d{1,}.\d{1,}.\d{1,})"/
-    );
-    if (/<.*\d{1,}.\d{1,}.\d{1,}/.test(version[0])) {
-        const nums = version[1].split('.');
+const getRawVersion = (ast_s) => {
+    const rawVersion = ast_s.match(/"name":"solidity","value":"(.*?)"/);
+    return rawVersion ? rawVersion[1] : 'n/a';
+};
+
+const getVersion = (rawVersion) => {
+    if (/n\/a/.test(rawVersion)) return rawVersion;
+    if (/<\d/.test(rawVersion)) {
+        const max = rawVersion.match(/<(\d{1,}\.\d{1,}\.\d{1,})/)[1];
+        const nums = max.split('.');
         nums[2] > 0 ? nums[2]-- : nums[1]--;
         return nums.join('.');
     }
-    return version ? version[1] : 'n/a';
+    if (/>=/.test(rawVersion))
+        return rawVersion.match(/>=(\d{1,}\.\d{1,}\.\d{1,})/)[1];
+    return rawVersion.replace(/^\^/, '').replace(/ /g, '');
 };
 
 const getMCC = (metrics) => {
-    console.log('metrics:', metrics);
     const controlStructures = [
         'functions',
         'ifStatement',
