@@ -5,33 +5,53 @@ import csv from "csvtojson";
 import ObjectsToCsv from "objects-to-csv";
 import * as c from "../contract/contract.js";
 
+const [START, END] = [100, 200];
+
 // TODO import from a conf file
-const fn_metric = "./data/metrics.csv";
-const fn_metric_json = "./data/metrics.json";
+const fn_metric = './data/metrics.csv';
+const fn_metric_json = './data/metrics.json';
 
 const getJsonMetricsFromSol = async (dest) => {
-    const data = await pfs.readFile(dest, "utf8");
+    const sol = await pfs.readFile(dest, 'utf8');
+    const abi = await getAbi(dest);
+    const bytecode = await getBytecode(dest);
     try {
-        return (paso(data));
+        return paso(sol, abi, bytecode, dest);
     } catch (e) {
-        console.log("Paso error in: ", dest);
+        console.log(`N. Paso error in: ${dest}`);
     }
- }
+};
+
+const getBytecode = async (dest) => {
+    const bytecode = dest.replace(/.sol$/i, '.bytecode');
+    if (!fs.existsSync(bytecode)) return undefined;
+    return await pfs.readFile(bytecode, 'utf8');
+};
+
+const getAbi = async (dest) => {
+    const abi = dest.replace(/.sol$/i, '.abi');
+    if (!fs.existsSync(abi)) return undefined;
+    return await pfs.readFile(dest.replace(/.sol$/i, '.abi'), 'utf8');
+};
 
 const writeMetricsSingleContract = async (dest) => {
     const doesExist = fs.existsSync(dest);
     if (!doesExist) return null;
-    const data = await getJsonMetricsFromSol(dest)
-    if(!data) return null;
-    data['contractAddress'] = dest.match(/(0x\w{40}).sol$/)?.[1];;
+    const data = await getJsonMetricsFromSol(dest);
+    if (!data) return null;
+    data['contractAddress'] = dest.match(/(0x\w{40}).sol$/)?.[1];
     const csv = new ObjectsToCsv([data]);
     await csv.toDisk(fn_metric, { append: true, header: false });
 };
 
 const writeMetrics2CSV = async () => {
     const sols = await c.getSolFromLocalStorage();
-    console.log(sols.length)
-    await sols.slice(0, 10_000).forEach(async (sol) => await writeMetricsSingleContract(sol));
+    // const sols = [
+    //     'data/contracts/0x02/0x02591b666f36ab5a8cb7e8c4b9dfb7b6b5888933.sol',
+    // ];
+    await sols
+        .slice(START, END)
+        .forEach(async (sol) => await writeMetricsSingleContract(sol));
 };
 
 const writeMetrics2JSON = () =>
