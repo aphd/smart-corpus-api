@@ -1,15 +1,15 @@
 import * as c from '../contract/contract.js';
 import fs from 'fs';
-import { exec } from 'child_process';
+import Web3 from 'web3';
 
 const init = async () => {
     try {
         const addresses = await c.getSolFromLocalStorage();
-        addresses.slice(0, 10).forEach((address) => {
-            const abi = address.replace(/.sol$/, '.bytecode');
-            console.log(abi);
-            if (!hasBytecode(abi)) {
-                storeBytecode(address, abi);
+        addresses.slice(0, 6).forEach(async (address) => {
+            const bc = address.replace(/.sol$/, '.bytecode');
+            console.log(bc);
+            if (!hasBytecode(bc)) {
+                await storeBytecode(bc);
             }
         });
     } catch (e) {
@@ -17,22 +17,14 @@ const init = async () => {
     }
 };
 
-const hasBytecode = (abi) => fs.existsSync(abi);
+const hasBytecode = (bc) => fs.existsSync(bc);
 
-const storeBytecode = (sol, abi) => {
-    console.log('sol, abi:', sol, abi);
-    const cmd = `solc --bin ${sol} > ${abi}`;
-    exec(cmd, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`stderr: ${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-    });
+const storeBytecode = async (bc) => {
+    const address = bc.match(/(\w{42})/)[1];
+    let web3 = new Web3(process.env.ETH_PROVIDER);
+    const bytecode = await web3.eth.getCode(address);
+    console.log(`Got the bytecode of ${address}\n`);
+    fs.writeFileSync(bc, bytecode);
 };
 
 init();
