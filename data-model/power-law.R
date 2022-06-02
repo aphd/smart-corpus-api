@@ -56,6 +56,13 @@ main <- function() {
   sapply(x_names, plot_pl)
 }
 
-main()
+goodness_of_fit <- function(xname) {
+  x <- DF[, xname] + 1
+  x_pl <- displ$new(x)
+  bs_p <- bootstrap_p(x_pl, no_of_sims = 1000, threads = 2)
+  print(bs_p)
+}
+goodness_of_fit("libraries")
+# main()
 # plot_legend()
 # plot_pl("total_lines")
