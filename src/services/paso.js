@@ -1,12 +1,14 @@
-import parser from "@solidity-parser/parser";
+import parser from '@solidity-parser/parser';
 
 export default function paso(code, abi, bytecode, dest) {
     let ast_j, ast_s, result;
 
     result = {
         comments: get_comments(code),
-        blanks: code.match(/((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm).length,
+        blanks: code.match(/\r\n\r\n/g).length,
+        total_lines: code.match(/\n/g).length + 1,
     };
+    result['LOC'] = result['total_lines'] - result['comments'] - result['blanks'];
     const metrics = {
         addresses: '"type":"ElementaryTypeName","name":"address"',
         assemblyStatement: '"type":"assemblyStatement"',
@@ -43,39 +45,43 @@ export default function paso(code, abi, bytecode, dest) {
         ast_s = JSON.stringify(ast_j);
         result['rawVersion'] = getRawVersion(ast_s);
         result['version'] = getVersion(result['rawVersion']);
-        result['total_lines'] = ast_j.loc.end.line;
     } catch (error) {
-        console.log(
-            `Error in PASO parser: some value will be n/a----, ${dest},\n${error}`
-        );
-        result['version'] = 'n/a';
-        result['total_lines'] = 'n/a';
+        console.log(`Error in PASO parser: some value will be NA----, ${dest},\n${error}`);
+        result['version'] = 'NA';
     }
 
     Object.entries(metrics).forEach(([key, value]) => {
-        result[key] = ast_s
-            ? (ast_s.match(new RegExp(value, 'gi')) || []).length
-            : 'n/a';
+        result[key] = ast_s ? (ast_s.match(new RegExp(value, 'gi')) || []).length : 'NA';
     });
-    result['mmc'] = getMCC(result);
-
-    result['abiLength'] = abi ? JSON.parse(abi)?.length : 'n/a';
-    result['abiStringLength'] = abi?.length || 'n/a';
-    result['bytecode'] = bytecode?.length > 0 ? bytecode?.length : 'n/a';
+    result['cyclomatic'] = getMCC(result);
+    result['abiLength'] = getAbiLength(abi);
+    result['abiStringLength'] = abi?.length || 'NA';
+    result['bytecode'] = bytecode?.length > 0 ? bytecode?.length : 'NA';
 
     return result;
 }
 
+const getAbiLength = (abi) => {
+    if (!abi) return 'NA';
+    let json;
+    try {
+        json = JSON.parse(abi);
+    } catch (error) {
+        return 'NA';
+    }
+    const l1_len = json.length;
+    const l2_len = json.reduce((a, c) => (a += Object.keys(c).length), 0);
+    return l1_len + l2_len;
+};
+
 const get_comments = (code) => {
-    const match = code.match(
-        /(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g
-    );
+    const match = code.match(/(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g);
     return match ? match.length : 0;
 };
 
 const getRawVersion = (ast_s) => {
     const rawVersion = ast_s.match(/"name":"solidity","value":"(.*?)"/);
-    return rawVersion ? rawVersion[1] : 'n/a';
+    return rawVersion ? rawVersion[1] : 'Na';
 };
 
 const getVersion = (rawVersion) => {
@@ -86,8 +92,7 @@ const getVersion = (rawVersion) => {
         nums[2] > 0 ? nums[2]-- : nums[1]--;
         return nums.join('.');
     }
-    if (/>=/.test(rawVersion))
-        return rawVersion.match(/>=(\d{1,}\.\d{1,}\.\d{1,})/)[1];
+    if (/>=/.test(rawVersion)) return rawVersion.match(/>=(\d{1,}\.\d{1,}\.\d{1,})/)[1];
     return rawVersion.replace(/^\^/, '').replace(/ /g, '');
 };
 
@@ -100,5 +105,6 @@ const getMCC = (metrics) => {
         'doWhileStatement',
         'tryStatement',
     ];
-    return controlStructures.reduce((a, c) => a + metrics[c], 0);
+    return controlStructures.reduce((a, c) => a + metrics[c], 0) || 'NA';
 };
+
