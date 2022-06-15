@@ -5,7 +5,7 @@ import csv from 'csvtojson';
 import ObjectsToCsv from 'objects-to-csv';
 import * as c from '../contract/contract.js';
 
-const [START, END] = [10_000, 20_000];
+const [START, END] = [60_000, 70_000];
 
 // TODO import from a conf file
 const fn_metric = './data/metrics.csv';
@@ -46,7 +46,7 @@ const writeMetricsSingleContract = async (dest) => {
 
 const writeMetrics2CSV = async () => {
     const sols = await c.getSolFromLocalStorage();
-    // const sols = ['data/contracts/0x01/0x010Cad103787C4a31D22Dd0458CF4696Bfc2Ba44.sol'];
+    // const sols = ['data/contracts/0x01/0x01003e4f6351c25dec19007f8f0adf1e9fe68bec.sol'];
     await sols.slice(START, END).forEach(async (sol) => await writeMetricsSingleContract(sol));
 };
 

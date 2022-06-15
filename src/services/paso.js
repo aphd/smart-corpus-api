@@ -5,10 +5,11 @@ export default function paso(code, abi, bytecode, dest) {
 
     result = {
         comments: get_comments(code),
-        blanks: code.match(/\r\n\r\n/g).length,
-        total_lines: code.match(/\n/g).length + 1,
+        blanks: code.match(/\n{2,}/g)?.length || 'NA',
+        total_lines: code.match(/\n/g)?.length || 'NA',
     };
-    result['LOC'] = result['total_lines'] - result['comments'] - result['blanks'];
+    const loc = result['total_lines'] - result['comments'] - result['blanks'];
+    result['LOC'] = loc > 0 ? loc : 'NA';
     const metrics = {
         addresses: '"type":"ElementaryTypeName","name":"address"',
         assemblyStatement: '"type":"assemblyStatement"',
@@ -76,7 +77,7 @@ const getAbiLength = (abi) => {
 
 const get_comments = (code) => {
     const match = code.match(/(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g);
-    return match ? match.length : 0;
+    return match ? match.length : 'NA';
 };
 
 const getRawVersion = (ast_s) => {
@@ -105,6 +106,7 @@ const getMCC = (metrics) => {
         'doWhileStatement',
         'tryStatement',
     ];
-    return controlStructures.reduce((a, c) => a + metrics[c], 0) || 'NA';
+    const mmcc = controlStructures.reduce((a, c) => a + metrics[c], 0);
+    return typeof mmcc == 'number' ? mmcc : 'NA';
 };
 
