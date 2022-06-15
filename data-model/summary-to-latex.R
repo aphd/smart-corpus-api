@@ -44,7 +44,7 @@ sdf <-
 library(magrittr)
 library("xtable")
 foo <- xtable(sdf, digits = 0) %>%
-  print(type = "latex",
+  print(type = "html",
         html.table.attributes = "",
         include.rownames = FALSE,
         format.args = list(big.mark = ","))

@@ -29,4 +29,5 @@ const storeBytecode = async (bc) => {
 };
 
 //init(1_200, 1_300);
-init(77_000, 83_000);
+init(1_000, 2_000);
+

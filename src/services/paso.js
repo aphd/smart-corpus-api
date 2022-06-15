@@ -1,15 +1,16 @@
 import parser from '@solidity-parser/parser';
 
-export default function paso(code, abi, bytecode, dest) {
+export default function paso(source, abi, bytecode, dest) {
     let ast_j, ast_s, result;
-
+    const code = getCodeFromMultipleSC(source);
     result = {
         comments: get_comments(code),
-        blanks: code.match(/\n{2,}/g)?.length || 'NA',
-        total_lines: code.match(/\n/g)?.length || 'NA',
+        blanks: code.match(/\r\n\r\n/g)?.length || code.match(/\n\n/g)?.length || 0,
+        total_lines: code.match(/\n/g)?.length + 1 || 'NA',
     };
     const loc = result['total_lines'] - result['comments'] - result['blanks'];
     result['LOC'] = loc > 0 ? loc : 'NA';
+    if (result['LOC'] == 'NA') Object.keys(result).forEach((e) => (result[e] = 'NA'));
     const metrics = {
         addresses: '"type":"ElementaryTypeName","name":"address"',
         assemblyStatement: '"type":"assemblyStatement"',
@@ -75,9 +76,17 @@ const getAbiLength = (abi) => {
     return l1_len + l2_len;
 };
 
+const getCodeFromMultipleSC = (code) => {
+    if (code.slice(0, 1) !== '{') return code;
+    code = code.slice(0, 2) == '{{' ? code.substring(1).slice(0, -1) : code;
+    const json = JSON.parse(code);
+    const sources = Object.values(json.sources || json).map((e) => e.content);
+    return sources.join('\n\n');
+};
+
 const get_comments = (code) => {
     const match = code.match(/(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g);
-    return match ? match.length : 'NA';
+    return match ? match.length : 0;
 };
 
 const getRawVersion = (ast_s) => {
