@@ -1,11 +1,11 @@
-import paso from "./paso.js";
-import fs from "fs";
+import paso from './paso.js';
+import fs from 'fs';
 import { promises as pfs } from 'fs';
-import csv from "csvtojson";
-import ObjectsToCsv from "objects-to-csv";
-import * as c from "../contract/contract.js";
+import csv from 'csvtojson';
+import ObjectsToCsv from 'objects-to-csv';
+import * as c from '../contract/contract.js';
 
-const [START, END] = [80_000, 85_000];
+const [START, END] = [2_000, 5_000];
 
 // TODO import from a conf file
 const fn_metric = './data/metrics.csv';
@@ -41,17 +41,13 @@ const writeMetricsSingleContract = async (dest) => {
     if (!data) return null;
     data['contractAddress'] = dest.match(/(0x\w{40}).sol$/)?.[1];
     const csv = new ObjectsToCsv([data]);
-    await csv.toDisk(fn_metric, { append: true, header: false });
+    await csv.toDisk(fn_metric, { append: true, header: true });
 };
 
 const writeMetrics2CSV = async () => {
     const sols = await c.getSolFromLocalStorage();
-    // const sols = [
-    //     'data/contracts/0x02/0x02591b666f36ab5a8cb7e8c4b9dfb7b6b5888933.sol',
-    // ];
-    await sols
-        .slice(START, END)
-        .forEach(async (sol) => await writeMetricsSingleContract(sol));
+    // const sols = ['data/contracts/0x00/0x001D77351daD0cD3f696c67EbBa5Bda0C11d0Db1.sol'];
+    await sols.slice(START, END).forEach(async (sol) => await writeMetricsSingleContract(sol));
 };
 
 const writeMetrics2JSON = () =>
@@ -59,9 +55,9 @@ const writeMetrics2JSON = () =>
         .fromFile(fn_metric)
         .then((r) => fs.writeFileSync(fn_metric_json, JSON.stringify(r)));
 
-const writeMetrics = (type) =>
-    type === "csv" ? writeMetrics2CSV() : writeMetrics2JSON();
+const writeMetrics = (type) => (type === 'csv' ? writeMetrics2CSV() : writeMetrics2JSON());
 
 export default writeMetrics;
 
 writeMetrics(process.argv.slice(2)[0]);
+
