@@ -25,7 +25,7 @@ const download = (address) => {
 };
 
 const getAddresses = async () => {
-    const [START, END] = [300, 400];
+    const [START, END] = [60_000, 80_000];
     const sols = await c.getSolFromLocalStorage();
     // const sols = ['data/contracts/0x00/0x001D77351daD0cD3f696c67EbBa5Bda0C11d0Db1.sol'];
     for (const sol of sols.slice(START, END)) {

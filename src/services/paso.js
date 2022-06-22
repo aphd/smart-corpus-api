@@ -1,16 +1,17 @@
 import parser from '@solidity-parser/parser';
 
+const commentRegExp = /(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g;
+
 export default function paso(source, abi, bytecode, dest) {
     let ast_j, ast_s, result;
     const code = getCodeFromMultipleSC(source);
+    const lines = code.split('\n');
     result = {
+        total_lines: lines.length || 'NA',
+        LOC: getLOC(code),
+        blanks: getBlanks(lines),
         comments: get_comments(code),
-        blanks: code.match(/\r\n\r\n/g)?.length || code.match(/\n\n/g)?.length || 0,
-        total_lines: code.match(/\n/g)?.length + 1 || 'NA',
     };
-    const loc = result['total_lines'] - result['comments'] - result['blanks'];
-    result['LOC'] = loc > 0 ? loc : 'NA';
-    if (result['LOC'] == 'NA') Object.keys(result).forEach((e) => (result[e] = 'NA'));
     const metrics = {
         addresses: '"type":"ElementaryTypeName","name":"address"',
         assemblyStatement: '"type":"assemblyStatement"',
@@ -63,6 +64,13 @@ export default function paso(source, abi, bytecode, dest) {
     return result;
 }
 
+const getLOC = (code) => {
+    code = code.replace(commentRegExp, '');
+    return code.split('\n').filter((e) => !/^\s*$/.test(e)).length;
+};
+
+const getBlanks = (lines) => lines.filter((e) => /^\s*$/.test(e)).length;
+
 const getAbiLength = (abi) => {
     if (!abi) return 'NA';
     let json;
@@ -85,13 +93,13 @@ const getCodeFromMultipleSC = (code) => {
 };
 
 const get_comments = (code) => {
-    const match = code.match(/(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g);
+    const match = code.match(commentRegExp);
     return match ? match.length : 0;
 };
 
 const getRawVersion = (ast_s) => {
     const rawVersion = ast_s.match(/"name":"solidity","value":"(.*?)"/);
-    return rawVersion ? rawVersion[1] : 'Na';
+    return rawVersion ? rawVersion[1] : 'NA';
 };
 
 const getVersion = (rawVersion) => {

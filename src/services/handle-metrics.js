@@ -5,18 +5,18 @@ import csv from 'csvtojson';
 import ObjectsToCsv from 'objects-to-csv';
 import * as c from '../contract/contract.js';
 
-const [START, END] = [2_000, 5_000];
+const [START, END] = [1_020, 1_025];
 
 // TODO import from a conf file
 const fn_metric = './data/metrics.csv';
 const fn_metric_json = './data/metrics.json';
 
 const getJsonMetricsFromSol = async (dest) => {
-    const sol = await pfs.readFile(dest, 'utf8');
+    const code = await pfs.readFile(dest, 'utf8');
     const abi = await getAbi(dest);
     const bytecode = await getBytecode(dest);
     try {
-        return paso(sol, abi, bytecode, dest);
+        return paso(cleanCode(code), abi, bytecode, dest);
     } catch (e) {
         console.log(`N. Paso error in: ${dest}`);
     }
@@ -44,9 +44,14 @@ const writeMetricsSingleContract = async (dest) => {
     await csv.toDisk(fn_metric, { append: true, header: true });
 };
 
+const cleanCode = (code) => {
+    code = code.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    return code.replace(/\t/g, '');
+};
+
 const writeMetrics2CSV = async () => {
     const sols = await c.getSolFromLocalStorage();
-    // const sols = ['data/contracts/0x00/0x001D77351daD0cD3f696c67EbBa5Bda0C11d0Db1.sol'];
+    // const sols = ['test.sol'];
     await sols.slice(START, END).forEach(async (sol) => await writeMetricsSingleContract(sol));
 };
 
