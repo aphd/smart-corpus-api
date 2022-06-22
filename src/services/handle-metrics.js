@@ -5,7 +5,7 @@ import csv from 'csvtojson';
 import ObjectsToCsv from 'objects-to-csv';
 import * as c from '../contract/contract.js';
 
-const [START, END] = [1_020, 1_025];
+const [START, END] = [1, 1_025];
 
 // TODO import from a conf file
 const fn_metric = './data/metrics.csv';
@@ -39,7 +39,6 @@ const writeMetricsSingleContract = async (dest) => {
     if (!doesExist) return null;
     const data = await getJsonMetricsFromSol(dest);
     if (!data) return null;
-    data['contractAddress'] = dest.match(/(0x\w{40}).sol$/)?.[1];
     const csv = new ObjectsToCsv([data]);
     await csv.toDisk(fn_metric, { append: true, header: true });
 };

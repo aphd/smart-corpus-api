@@ -7,6 +7,7 @@ export default function paso(source, abi, bytecode, dest) {
     const code = getCodeFromMultipleSC(source);
     const lines = code.split('\n');
     result = {
+        contractAddress: dest.match(/(0x\w{40}).sol$/)?.[1] || 'NA',
         total_lines: lines.length || 'NA',
         LOC: getLOC(code),
         blanks: getBlanks(lines),
