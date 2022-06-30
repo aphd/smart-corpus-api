@@ -10,10 +10,10 @@ IMAGE_PATH <- "./docs/images/"
 plot_histo <- function(xname) {
   x <- DF[, xname] + 1
   png(file = paste(IMAGE_PATH, "histo-", xname, ".png", sep = ""), width = 550, height = 450)
-  hist(x,  main = xname, breaks = 400, xlab = NULL, xlim=c(0,4000), cex.main=1.8, cex.axis=1.5, cex.lab=1.5, col = "grey",border = "grey")
+  hist(x,  main = xname, breaks = 180, xlab = NULL, xlim=c(0,840), cex.main=1.8, cex.axis=1.5, cex.lab=1.5, col = "grey",border = "grey")
   dev.off()
 }
-plot_histo("total_lines")
+plot_histo("cyclomatic")
 
 plot_pl <- function(xname) {
   x <- DF[, xname] + 1
