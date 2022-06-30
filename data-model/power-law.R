@@ -4,7 +4,7 @@
 # head(cars)
 
 library("poweRlaw")
-DF <- read.csv("./data/metrics.sort.uniq.grep.csv")
+DF <- read.csv("./data/metrics.csv")
 IMAGE_PATH <- "./docs/images/"
 
 
