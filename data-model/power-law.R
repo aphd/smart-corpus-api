@@ -7,7 +7,13 @@ library("poweRlaw")
 DF <- read.csv("./data/metrics.csv")
 IMAGE_PATH <- "./docs/images/"
 
-
+plot_histo <- function(xname) {
+  x <- DF[, xname] + 1
+  png(file = paste(IMAGE_PATH, "histo-", xname, ".png", sep = ""), width = 550, height = 450)
+  hist(x,  main = xname, breaks = 400, xlab = NULL, xlim=c(0,4000), cex.main=1.8, cex.axis=1.5, cex.lab=1.5, col = "grey",border = "grey")
+  dev.off()
+}
+plot_histo("total_lines")
 
 plot_pl <- function(xname) {
   x <- DF[, xname] + 1
@@ -62,7 +68,8 @@ goodness_of_fit <- function(xname) {
   bs_p <- bootstrap_p(x_pl, no_of_sims = 1000, threads = 2)
   print(bs_p)
 }
-goodness_of_fit("libraries")
+# goodness_of_fit("libraries")
 # main()
 # plot_legend()
 # plot_pl("total_lines")
+
