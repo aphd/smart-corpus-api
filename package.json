@@ -15,9 +15,9 @@
         "start": "node dist/index.js",
         "store-bytecode": "node src/services/store-bytecode.js",
         "test": "jest",
-        "download:abi": "node src/service/download-abi.js",
+        "download:abi": "node src/services/download-abi.js",
         "update": "bash src/scripts/update-metrics.sh",
-        "write-metrics-to-csv": "node src/services/handle-metrics.js csv",
+        "write-metrics": "node src/services/write-metrics.js csv",
         "count:files": "find data/contracts/ -maxdepth 2 -type f | wc -l"
     },
     "author": "Bill Sourour (Dev Mastery)",
