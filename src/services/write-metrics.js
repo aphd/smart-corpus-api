@@ -5,7 +5,7 @@ import csv from 'csvtojson';
 import ObjectsToCsv from 'objects-to-csv';
 import * as c from '../contract/contract.js';
 
-const [START, END] = [20_000, 30_000];
+const [START, END] = [40_000, 50_000];
 
 // TODO import from a conf file
 const fn_metric = './data/metrics.csv';
