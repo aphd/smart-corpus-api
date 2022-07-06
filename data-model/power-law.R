@@ -1,11 +1,11 @@
-
-# plot(cars, main = "Stopping Distance versus Speed")
-# lines(stats::lowess(cars))
-# head(cars)
-
+#################################
+######### LOAD CSV Data  ########
 library("poweRlaw")
-DF <- read.csv("./data/metrics.10k.csv")
+DF <- read.csv("./data/metrics.csv")
 IMAGE_PATH <- "./docs/images/"
+
+#################################
+######### Plot Histogram  #######
 
 plot_histo <- function(xname) {
   x <- DF[, xname] + 1
@@ -13,26 +13,10 @@ plot_histo <- function(xname) {
   hist(x,  main = xname, breaks = 150, xlab = NULL, xlim=c(0,20), cex.main=1.8, cex.axis=1.5, cex.lab=1.5, col = "grey",border = "grey")
   dev.off()
 }
-# plot_histo("mapping")
+plot_histo("mapping")
 
-main <- function() {
-  # x_names <- c("events", "abiLength", "comments", "total_lines", "bytecode", "modifiers")
-  x_names <- c("libraries")
-  n_rows <- length(x_names)
-  par(mfrow = c(n_rows, 2))
-  # ex_3("total_lines")
-  sapply(x_names, plot_pl)
-}
-
-goodness_of_fit <- function(xname) {
-  x <- DF[, xname] + 1
-  x_pl <- displ$new(x)
-  bs_p <- bootstrap_p(x_pl, no_of_sims = 1000, threads = 2)
-  print(bs_p)
-}
-# goodness_of_fit("libraries")
-
-### Power Law
+#################################
+######### Plot Power Law  #######
 plot_pl <- function(xname) {
   x <- DF[, xname] + 1
   # x <- head(x, 1300)
@@ -68,7 +52,14 @@ plot_pl <- function(xname) {
   legend("bottomleft", cex = 1.2, col = c("red", "green"), legend = labels, lwd = 2, bty = "n", y.intersp = 2)
   dev.off()
 }
-
-# main()
-# plot_legend()
 plot_pl("payable")
+
+#################################
+#########  Goodness_of_fit  #######
+goodness_of_fit <- function(xname) {
+  x <- DF[, xname] + 1
+  x_pl <- displ$new(x)
+  bs_p <- bootstrap_p(x_pl, no_of_sims = 1000, threads = 2)
+  print(bs_p)
+}
+# goodness_of_fit("libraries")
