@@ -1,26 +1,26 @@
-
-# plot(cars, main = "Stopping Distance versus Speed")
-# lines(stats::lowess(cars))
-# head(cars)
-
+#################################
+######### LOAD CSV Data  ########
 library("poweRlaw")
 DF <- read.csv("./data/metrics.csv")
 IMAGE_PATH <- "./docs/images/"
 
+#################################
+######### Plot Histogram  #######
+
 plot_histo <- function(xname) {
   x <- DF[, xname] + 1
-  png(file = paste(IMAGE_PATH, "histo-", xname, ".png", sep = ""), width = 550, height = 450)
-  hist(x,  main = xname, breaks = 400, xlab = NULL, xlim=c(0,4000), cex.main=1.8, cex.axis=1.5, cex.lab=1.5, col = "grey",border = "grey")
+  png(file = paste(IMAGE_PATH,  xname, "-histo.png", sep = ""), width = 550, height = 450)
+  hist(x,  main = xname, breaks = 150, xlab = NULL, xlim=c(0,20), cex.main=1.8, cex.axis=1.5, cex.lab=1.5, col = "grey",border = "grey")
   dev.off()
 }
-plot_histo("total_lines")
+plot_histo("mapping")
 
+#################################
+######### Plot Power Law  #######
 plot_pl <- function(xname) {
   x <- DF[, xname] + 1
-
-  png(file = paste(IMAGE_PATH, "histo-", xname, ".png", sep = ""), width = 250, height = 550)
-  #
-  hist(x, main = xname, border = F, breaks = 30, xlab = NULL)
+  # x <- head(x, 1300)
+  x <- x[!is.na(x)]
 
   x_pl <- displ$new(x)
   est <- estimate_xmin(x_pl)
@@ -33,35 +33,29 @@ plot_pl <- function(xname) {
   x_ln$setXmin(est)
   x_ln$setPars(estimate_pars(x_ln))
 
-  x_ex <- disexp$new(x)
-  x_ex$setPars(estimate_pars(x_ex))
+  # x_ex <- disexp$new(x)
+  # x_ex$setPars(estimate_pars(x_ex))
 
-  x_po <- dispois$new(x)
-  x_po$setPars(estimate_pars(x_po))
-  dev.off()
+  # x_po <- dispois$new(x)
+  # x_po$setPars(estimate_pars(x_po))
+  # dev.off()
 
   png(file = paste(IMAGE_PATH, "powerlaw-", xname, ".png", sep = ""), width = 550, height = 550)
 
   plot(main = xname, x_ln, ylab = "P (X > x)", xlab = "", pch = 4, cex = 0.8)
   lines(x_pl, col = "red")
   lines(x_ln, col = "green")
-  lines(x_ex, col = "blue")
-  lines(x_po, col = "orange")
-  labels <- c("Power Law", "Log-Normal", "Exponential", "Poisson")
-  legend("bottomleft", cex = 1.2, col = c("red", "green", "blue", "orange"), legend = labels, lwd = 2, bty = "n", y.intersp = 2)
+  # lines(x_ex, col = "blue")
+  # lines(x_po, col = "orange")
+  # labels <- c("Power Law", "Log-Normal", "Exponential")
+  labels <- c("Power Law", "Log-Normal")
+  legend("bottomleft", cex = 1.2, col = c("red", "green"), legend = labels, lwd = 2, bty = "n", y.intersp = 2)
   dev.off()
 }
+plot_pl("payable")
 
-
-main <- function() {
-  # x_names <- c("events", "abiLength", "comments", "total_lines", "bytecode", "modifiers")
-  x_names <- c("libraries")
-  n_rows <- length(x_names)
-  par(mfrow = c(n_rows, 2))
-  # ex_3("total_lines")
-  sapply(x_names, plot_pl)
-}
-
+#################################
+#########  Goodness_of_fit  #######
 goodness_of_fit <- function(xname) {
   x <- DF[, xname] + 1
   x_pl <- displ$new(x)
@@ -69,7 +63,3 @@ goodness_of_fit <- function(xname) {
   print(bs_p)
 }
 # goodness_of_fit("libraries")
-# main()
-# plot_legend()
-# plot_pl("total_lines")
-
