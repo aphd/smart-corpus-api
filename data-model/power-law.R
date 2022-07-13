@@ -58,8 +58,9 @@ plot_pl("payable")
 #########  Goodness_of_fit  #######
 goodness_of_fit <- function(xname) {
   x <- DF[, xname] + 1
+  x <- x[!is.na(x)]
   x_pl <- displ$new(x)
   bs_p <- bootstrap_p(x_pl, no_of_sims = 1000, threads = 2)
   print(bs_p)
 }
-# goodness_of_fit("libraries")
+goodness_of_fit("libraries")

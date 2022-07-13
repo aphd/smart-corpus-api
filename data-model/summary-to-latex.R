@@ -9,7 +9,6 @@ df <- read.csv("./data/metrics.csv", stringsAsFactors = T)
 df <- subset(df, select = -contractAddress)
 df <- subset(df, select = -version)
 df <- subset(df, select = -rawVersion)
-df <- subset(df, select = -bytecode)
 
 # col_order <- c("total_lines",  "blanks", "functions", "payable", "events", "mapping", "modifiers", "contracts_definition", "addresses", "cyclomatic", "comments", "abiLength", "abiStringLength", "LOC")
 
@@ -43,7 +42,7 @@ sdf <-
 
 library(magrittr)
 library("xtable")
-foo <- xtable(sdf, digits = 0) %>%
+foo <- xtable(sdf, digits = 2) %>%
   print(type = "latex",
         html.table.attributes = "",
         include.rownames = FALSE,
